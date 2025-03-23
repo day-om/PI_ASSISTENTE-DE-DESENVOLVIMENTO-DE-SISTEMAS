@@ -1,22 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Telas;
 
-import Classes.Lista_adm;
-import Classes.Lista_prof;
+
+import Classes.Usuario;
 import javax.swing.table.DefaultTableModel;
 
 
 public class Cadastro_adm extends javax.swing.JFrame {
 
-    public Lista_adm listaAdm;
+   
     private DefaultTableModel tabela;
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
     
     public Cadastro_adm() {
         initComponents();
-        listaAdm = new Lista_adm(tabela);
+        
+    }
+
+    Cadastro_adm(Usuario usuarioLogado) {
+        initComponents();
     }
 
     /**
@@ -36,7 +38,6 @@ public class Cadastro_adm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         bt_menu = new javax.swing.JButton();
-        bt_perfil = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
 
@@ -98,13 +99,7 @@ public class Cadastro_adm extends javax.swing.JFrame {
                 bt_menuActionPerformed(evt);
             }
         });
-        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 10, 30, 30));
-
-        bt_perfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bt_perfil.setForeground(new java.awt.Color(255, 255, 255));
-        bt_perfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/do-utilizador.png"))); // NOI18N
-        bt_perfil.setToolTipText("Perfil");
-        jPanel1.add(bt_perfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, 30, 30));
+        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, 30, 30));
 
         bt_sair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_sair.setForeground(new java.awt.Color(255, 255, 255));
@@ -129,25 +124,25 @@ public class Cadastro_adm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_menuActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-        menu_cadastrar menu = new menu_cadastrar();
+        menu_cadastrar menu = new menu_cadastrar(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_novoCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_novoCadastroActionPerformed
-        novo_adm adm = new novo_adm(listaAdm);
+        novo_adm adm = new novo_adm(usuarioLogado);
         adm.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_novoCadastroActionPerformed
 
     private void bt_consultarCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_consultarCadastroActionPerformed
-        lista_adm adm = new lista_adm ();
+        lista_adm adm = new lista_adm (usuarioLogado);
         adm.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_consultarCadastroActionPerformed
@@ -191,7 +186,6 @@ public class Cadastro_adm extends javax.swing.JFrame {
     private javax.swing.JButton bt_consultarCadastro;
     private javax.swing.JButton bt_menu;
     private javax.swing.JButton bt_novoCadastro;
-    private javax.swing.JButton bt_perfil;
     private javax.swing.JButton bt_sair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

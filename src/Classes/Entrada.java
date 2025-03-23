@@ -1,25 +1,42 @@
 
 package Classes;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 
 public class Entrada {
-    String aluno;
+    int id;
+    int aluno;
     String data;
     Double valor;
-    String formaPagamento;
+    int formaPagamento;
+    int usuario;
 
-    public Entrada(String aluno, String data, Double valor, String formaPagamento) {
+    public Entrada( String data,Double valor,int aluno, int formaPagamento,int usuario) {
         this.aluno = aluno;
         this.data = data;
         this.valor = valor;
         this.formaPagamento = formaPagamento;
+        this.usuario = usuario;
+    }
+    public Entrada(){
+        
     }
 
-    public String getAluno() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getAluno() {
         return aluno;
     }
 
-    public void setAluno(String aluno) {
+    public void setAluno(int aluno) {
         this.aluno = aluno;
     }
 
@@ -39,13 +56,22 @@ public class Entrada {
         this.valor = valor;
     }
 
-    public String getFormaPagamento() {
+    public int getFormaPagamento() {
         return formaPagamento;
     }
 
-    public void setFormaPagamento(String formaPagamento) {
+    public void setFormaPagamento(int formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
+
+    public int getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(int usuario) {
+        this.usuario = usuario;
+    }
+    
     
     
     

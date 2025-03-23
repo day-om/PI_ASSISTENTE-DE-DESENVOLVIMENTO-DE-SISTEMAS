@@ -3,17 +3,40 @@ package Classes;
 
 
 public class Professor {
+    int idProfessor;
     String nome;
-    String instrumento;
-    String horario_manha;
-    String horario_tarde;
-
-    public Professor(String nome, String instrumento, String horario_manha, String horario_tarde) {
+    int instrumento;
+    String instru;
+ 
+    
+    
+    public Professor(){
+        
+    }
+    public Professor(String nome, int instrumento) {
+        this.idProfessor = idProfessor;
         this.nome = nome;
         this.instrumento = instrumento;
-        this.horario_manha = horario_manha;
-        this.horario_tarde = horario_tarde;
+        
     }
+
+    public Professor(int idProfessor,String nome, int instrumento) {
+        this.idProfessor = idProfessor;
+        this.nome = nome;
+        this.instrumento = instrumento;
+        
+    }
+
+    public String getInstru() {
+        return instru;
+    }
+
+    public void setInstru(String instru) {
+        this.instru = instru;
+    }
+    
+
+  
 
     public String getNome() {
         return nome;
@@ -23,29 +46,23 @@ public class Professor {
         this.nome = nome;
     }
 
-    public String getInstrumento() {
+    public int getInstrumento() {
         return instrumento;
     }
 
-    public void setInstrumento(String instrumento) {
+    public void setInstrumento(int instrumento) {
         this.instrumento = instrumento;
     }
 
-    public String getHorario_manha() {
-        return horario_manha;
+    public int getIdProfessor() {
+        return idProfessor;
     }
 
-    public void setHorario_manha(String horario_manha) {
-        this.horario_manha = horario_manha;
+    public void setIdProfessor(int idProfessor) {
+        this.idProfessor = idProfessor;
     }
 
-    public String getHorario_tarde() {
-        return horario_tarde;
-    }
-
-    public void setHorario_tarde(String horario_tarde) {
-        this.horario_tarde = horario_tarde;
-    }
+    
     
 
    

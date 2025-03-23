@@ -2,9 +2,9 @@
 package Telas;
 
 import Classes.Aluno;
-import Classes.Lista_aluno;
-import Classes.Lista_prof;
+import Classes.Conexao_bd;
 import Classes.Professor;
+import Classes.Usuario;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,11 +14,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class novo_aluno extends javax.swing.JFrame {
 
-     public Lista_aluno listaAluno;
+     Usuario usuarioLogado = Usuario.getUsuarioLogado();
     
-    public novo_aluno(Lista_aluno listaAluno) {
+    public novo_aluno() {
         initComponents();
-        this.listaAluno = listaAluno;
+    
+    }
+
+    novo_aluno(Usuario usuarioLogado) {
+        initComponents();
     }
 
     /**
@@ -51,7 +55,6 @@ public class novo_aluno extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         bt_menu = new javax.swing.JButton();
-        bt_perfil = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
 
@@ -121,6 +124,11 @@ public class novo_aluno extends javax.swing.JFrame {
 
         recebe_pacote.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3 aulas semanais", "5 aulas semanais" }));
         recebe_pacote.setToolTipText("Escolha o pacote de aulas");
+        recebe_pacote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recebe_pacoteActionPerformed(evt);
+            }
+        });
         jPanel3.add(recebe_pacote, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, -1, -1));
 
         recebe_instrumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Teclado", "Violão", "Flauta" }));
@@ -174,13 +182,7 @@ public class novo_aluno extends javax.swing.JFrame {
                 bt_menuActionPerformed(evt);
             }
         });
-        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 30, 30));
-
-        bt_perfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bt_perfil.setForeground(new java.awt.Color(255, 255, 255));
-        bt_perfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/do-utilizador.png"))); // NOI18N
-        bt_perfil.setToolTipText("Perfil");
-        jPanel1.add(bt_perfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, 30, 30));
+        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, 30, 30));
 
         bt_sair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_sair.setForeground(new java.awt.Color(255, 255, 255));
@@ -205,13 +207,13 @@ public class novo_aluno extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_menuActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-        Cadastro_aluno aluno = new Cadastro_aluno();
+        Cadastro_aluno aluno = new Cadastro_aluno(usuarioLogado);
         aluno.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
@@ -220,10 +222,12 @@ public class novo_aluno extends javax.swing.JFrame {
         String nome = recebe_nome.getText();
         String idade = recebe_idade.getText();
         String cpf = recebe_cpf.getText();
-        String pacote = (String) recebe_pacote.getSelectedItem();
-        String instrumento = (String) recebe_instrumento.getSelectedItem();
-        String nivel = (String) recebe_nivel.getSelectedItem();
-        
+        String pct = (String) recebe_pacote.getSelectedItem();
+        String instru = (String) recebe_instrumento.getSelectedItem();
+        String niv = (String) recebe_nivel.getSelectedItem();
+        int pacote = 0;
+        int instrumento = 0;
+        int nivel = 0;
       
         if (nome.isEmpty() || idade.isEmpty() || cpf.isEmpty()){
         JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
@@ -242,21 +246,91 @@ public class novo_aluno extends javax.swing.JFrame {
         return;   
         }
         
-        Aluno aluno = new Aluno (nome,idade,cpf,pacote,instrumento,nivel);
-        listaAluno.Adicionar(aluno);
+        switch (pct) {
+        case "3 aulas semanais":
+           pacote = 1;
+        break;
+        case "5 aulas semanais":
+            pacote = 2;
+        break;
+        default:
+            JOptionPane.showMessageDialog(null, "Pacote inválido"); 
+        return;
+        }        
+               
+        switch (niv) {
+        case "Iniciante":
+           nivel = 1;
+        break;
+        case "Intermediário":
+            nivel = 2;
+        break;
+        case "Avançado":
+            nivel = 3;
+        break;
         
-        JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+        default:
+            JOptionPane.showMessageDialog(null, "Nível inválido"); 
+        return;
+        }
+        
+        switch (instru) {
+        case "Teclado":
+           instrumento = 1;
+        break;
+        case "Violão":
+            instrumento = 2;
+        break;
+        case "Flauta":
+            instrumento = 3;
+        break;
+        
+        default:
+            JOptionPane.showMessageDialog(null, "Instrumento inválido"); 
+        return;
+        }
+                
+        Aluno aluno = new Aluno (nome,idade,cpf,pacote,nivel,instrumento);
+      
+        
+        Conexao_bd dao;
+        boolean status;
+        int resposta;
+        
+        dao = new Conexao_bd();
+        status = dao.conectar();
+        if(status == false){
+            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        }else{
+            resposta = dao.salvarAluno(aluno);
             
-        recebe_nome.setText("");
-        recebe_idade.setText("");
-        recebe_cpf.setText("");
+            if(resposta == 1){
+                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
+               
+                recebe_nome.setText("");
+                recebe_idade.setText("");
+                recebe_cpf.setText("");
+                recebe_nome.requestFocus();
+                
+            }else if (resposta ==1062){
+                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
+            }else{
+                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
+            }
+            dao.desconectar();
+        }
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
         recebe_nome.setText("");
         recebe_idade.setText("");
         recebe_cpf.setText("");
+        recebe_nome.requestFocus();
     }//GEN-LAST:event_bt_limparActionPerformed
+
+    private void recebe_pacoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recebe_pacoteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recebe_pacoteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -289,12 +363,8 @@ public class novo_aluno extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                DefaultTableModel tabela_alunos = new DefaultTableModel(
-                        new Object[]{"Aluno", "Idade", "Cpf", "Pacote","Instrumento","Nível"},
-                        0
-                );
-                Lista_aluno listaAluno = new Lista_aluno(tabela_alunos);
-                new novo_aluno(listaAluno).setVisible(true);
+               
+                new novo_aluno().setVisible(true);
             }
         });
     }
@@ -303,7 +373,6 @@ public class novo_aluno extends javax.swing.JFrame {
     private javax.swing.JButton bt_enviar;
     private javax.swing.JButton bt_limpar;
     private javax.swing.JButton bt_menu;
-    private javax.swing.JButton bt_perfil;
     private javax.swing.JButton bt_sair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

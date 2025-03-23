@@ -1,17 +1,25 @@
 
 package Telas;
 
-import Classes.Lista_saida;
+import Classes.Conexao_bd;
+import Classes.Entrada;
+import Classes.Saida;
+import Classes.Usuario;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
 public class nova_saida extends javax.swing.JFrame {
     
-    public Lista_saida listaSaida;
-    
-    public nova_saida(Lista_saida listaSaida) {
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
+  
+    public nova_saida() {
         initComponents();
-        this.listaSaida = listaSaida;
+        
+    }
+
+    nova_saida(Usuario usuarioLogado) {
+        initComponents();
     }
 
     /**
@@ -31,8 +39,12 @@ public class nova_saida extends javax.swing.JFrame {
         recebe_data = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         recebe_valor = new javax.swing.JTextField();
+        recebe_usuario = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        id_usuario = new javax.swing.JTextField();
+        pesquisar_usuario = new javax.swing.JButton();
         bt_menu1 = new javax.swing.JButton();
-        bt_perfil1 = new javax.swing.JButton();
         bt_sair1 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -57,28 +69,56 @@ public class nova_saida extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setLabelFor(recebe_descricao);
         jLabel4.setText("DESCRIÇÃO:");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
         recebe_descricao.setToolTipText("Digite a descrição da saída ");
-        jPanel4.add(recebe_descricao, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 440, 50));
+        jPanel4.add(recebe_descricao, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 440, 50));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("DATA:");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
 
         recebe_data.setToolTipText("Digite a data da entrada");
-        jPanel4.add(recebe_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 190, -1));
+        jPanel4.add(recebe_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 190, -1));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("VALOR:");
-        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 90, -1, -1));
+        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, -1, -1));
 
         recebe_valor.setToolTipText("Digite o valor da entrada");
-        jPanel4.add(recebe_valor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 200, -1));
+        jPanel4.add(recebe_valor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, 200, -1));
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 100, 480, 180));
+        recebe_usuario.setToolTipText("Digite o nome do usuário");
+        recebe_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recebe_usuarioActionPerformed(evt);
+            }
+        });
+        jPanel4.add(recebe_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 180, -1));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("LOGIN - USUÁRIO");
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("ID");
+        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 20, 20));
+        jPanel4.add(id_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 100, -1));
+
+        pesquisar_usuario.setText("Pesquisar");
+        pesquisar_usuario.setToolTipText("Clique para pesquisar o usuário");
+        pesquisar_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pesquisar_usuarioActionPerformed(evt);
+            }
+        });
+        jPanel4.add(pesquisar_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 30, -1, -1));
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 100, 480, 230));
 
         bt_menu1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_menu1.setForeground(new java.awt.Color(255, 255, 255));
@@ -89,13 +129,7 @@ public class nova_saida extends javax.swing.JFrame {
                 bt_menu1ActionPerformed(evt);
             }
         });
-        jPanel1.add(bt_menu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 30, 30));
-
-        bt_perfil1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bt_perfil1.setForeground(new java.awt.Color(255, 255, 255));
-        bt_perfil1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/do-utilizador.png"))); // NOI18N
-        bt_perfil1.setToolTipText("Perfil");
-        jPanel1.add(bt_perfil1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 30, 30));
+        jPanel1.add(bt_menu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 30, 30));
 
         bt_sair1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_sair1.setForeground(new java.awt.Color(255, 255, 255));
@@ -113,7 +147,7 @@ public class nova_saida extends javax.swing.JFrame {
         jPanel5.setLayout(new java.awt.BorderLayout());
         jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 20));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(51, 81, 177));
         jLabel6.setText("SAÍDA");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, -1, -1));
@@ -129,16 +163,21 @@ public class nova_saida extends javax.swing.JFrame {
         bt_enviar.setForeground(new java.awt.Color(255, 255, 255));
         bt_enviar.setText("Enviar");
         bt_enviar.setToolTipText("Cique para enviar as informações");
-        jPanel1.add(bt_enviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, 100, 30));
+        bt_enviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_enviarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bt_enviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 350, 100, 30));
 
         bt_limpar.setBackground(new java.awt.Color(51, 140, 233));
         bt_limpar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_limpar.setForeground(new java.awt.Color(255, 255, 255));
         bt_limpar.setText("Limpar");
         bt_limpar.setToolTipText("Cique para limpar as informações");
-        jPanel1.add(bt_limpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 100, 30));
+        jPanel1.add(bt_limpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 350, 100, 30));
 
-        bt_lista_saidas.setBackground(javax.swing.UIManager.getDefaults().getColor("Actions.Green"));
+        bt_lista_saidas.setBackground(new java.awt.Color(51, 140, 233));
         bt_lista_saidas.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_lista_saidas.setForeground(new java.awt.Color(255, 255, 255));
         bt_lista_saidas.setText("LISTA DE SAÍDAS");
@@ -156,22 +195,90 @@ public class nova_saida extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_menu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menu1ActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_menu1ActionPerformed
 
     private void bt_sair1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sair1ActionPerformed
-        menu_financeiro menu = new menu_financeiro();
+        menu_financeiro menu = new menu_financeiro(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_sair1ActionPerformed
 
     private void bt_lista_saidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_lista_saidasActionPerformed
-        lista_saida lista = new lista_saida();
+        lista_saida lista = new lista_saida(usuarioLogado);
         lista.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_lista_saidasActionPerformed
+
+    private void recebe_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recebe_usuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recebe_usuarioActionPerformed
+
+    private void pesquisar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisar_usuarioActionPerformed
+        String nome;
+        nome = recebe_usuario.getText();
+
+        Conexao_bd dao = new Conexao_bd();
+        boolean status = dao.conectar();
+
+        if(status == true){
+            Classes.Usuario usuario = dao.consultarUsuario(nome);
+            System.out.println(dao.consultarUsuario(nome));
+            if(usuario == null){
+                JOptionPane.showMessageDialog(null,"Usuario não localizado!");
+            }else{
+                recebe_usuario.setText(usuario.getLogin());
+                id_usuario.setText(Integer.toString(usuario.getIdUsuario()));
+            }
+            dao.desconectar();
+        }else{
+            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        }
+    }//GEN-LAST:event_pesquisar_usuarioActionPerformed
+
+    private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
+        String descricao = recebe_descricao.getText();
+        String data = recebe_data.getText();     
+        Double valor = Double.parseDouble(recebe_valor.getText());
+        int usuario = Integer.parseInt(id_usuario.getText());
+           
+      
+                
+        Saida saida = new Saida(descricao,data,valor,usuario);
+        
+        Conexao_bd dao;
+        boolean status;
+        int resposta;
+        
+        dao = new Conexao_bd();
+        status = dao.conectar();
+        if(status == false){
+            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        }else{
+            resposta = dao.salvarSaida(saida);
+            
+            if(resposta == 1){
+                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
+               
+                recebe_usuario.setText("");
+                recebe_usuario.requestFocus();
+                
+            }else if (resposta ==1062){
+                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
+            }else{
+                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
+            }
+            dao.desconectar();
+        }
+            
+        recebe_usuario.setText("");
+        recebe_descricao.setText("");
+        recebe_data.setText("");
+        recebe_valor.setText("");
+        id_usuario.setText("");
+    }//GEN-LAST:event_bt_enviarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,12 +312,7 @@ public class nova_saida extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                DefaultTableModel tabela_saida = new DefaultTableModel(
-                        new Object[]{"Descrição","Data","Valor"},
-                        0
-                );
-                Lista_saida listaSaida = new Lista_saida(tabela_saida);
-                new nova_saida(listaSaida).setVisible(true);
+                new nova_saida().setVisible(true);
             }
         });
     }
@@ -220,19 +322,23 @@ public class nova_saida extends javax.swing.JFrame {
     private javax.swing.JButton bt_limpar;
     private javax.swing.JButton bt_lista_saidas;
     private javax.swing.JButton bt_menu1;
-    private javax.swing.JButton bt_perfil1;
     private javax.swing.JButton bt_sair1;
+    private javax.swing.JTextField id_usuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JButton pesquisar_usuario;
     private javax.swing.JTextField recebe_data;
     private javax.swing.JTextField recebe_descricao;
+    private javax.swing.JTextField recebe_usuario;
     private javax.swing.JTextField recebe_valor;
     // End of variables declaration//GEN-END:variables
 }

@@ -2,28 +2,109 @@
 
 package Telas;
 
-import Classes.Lista_aluno;
-import Classes.Lista_prof;
+
+import Classes.Aluno;
+import Classes.Conexao_bd;
+import Classes.Usuario;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 
 public class lista_aluno extends javax.swing.JFrame {
 
-    private DefaultTableModel tabela;
-    public Lista_aluno listaAluno;
+    
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
     
     
     public lista_aluno() {
         initComponents();
-        iniciartabela();
-        listaAluno = new Lista_aluno(tabela);
+        preencherTabela();
+        
+    }
+
+    lista_aluno(Usuario usuarioLogado) {
+        initComponents();
+        preencherTabela(); 
     }
     
-    private void iniciartabela(){
-        tabela = new DefaultTableModel(new Object[]{"Aluno", "Idade", "Cpf", "Pacote","Instrumento","Nível"},0);
-        mostra_consulta.setModel(tabela);
+    private void preencherTabela() {
+        Conexao_bd dao = new Conexao_bd();
+
+        String nome = recebe_nome.getText();
+        List<Aluno> listaAluno = dao.getAluno(nome);
+
+        DefaultTableModel tabelaProf = (DefaultTableModel) mostra_consulta.getModel();
+        tabelaProf.setNumRows(0);
+
+        mostra_consulta.setRowSorter(new TableRowSorter(tabelaProf));
+        if (listaAluno != null) {
+            for (Aluno c : listaAluno)    {
+                Object[] obj = new Object[]{
+                    c.getId(),
+                    c.getNome(),
+                    c.getIdade(),
+                    c.getCpf(),
+                    c.getPacote(),
+                    c.getNivel(),
+                    c.getInstrumento(),};
+                tabelaProf.addRow(obj);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Lista de alunos vazia!");
+        }
+     }
+    private boolean excluirDoBanco(int id) {
+    Conexao_bd dao = new Conexao_bd();
+    boolean excluido = dao.excluirAluno(id); 
+
+    if (excluido) {
+        return true;
+    } else {
+        return false;
     }
     
+}
+   private void excluirLinhaSelecionada() {
+    int linhaSelecionada = mostra_consulta.getSelectedRow();
+    if (linhaSelecionada != -1) {
+        
+        int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
+        
+        int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?", 
+                                                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+        if (resposta == JOptionPane.YES_OPTION) {
+            
+            boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
+
+            if (excluidoComSucesso) {
+                DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
+                modeloTabela.removeRow(linhaSelecionada);
+                JOptionPane.showMessageDialog(null, "Aluno excluído com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Não é possível excluir esse aluno, pois existem registros associados a ele.");
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+    }
+}
+    private void atualizarUsuarioNaTabela(int id,String nome, String idade, String cpf, int pacote, int nivel, int instrumento) {
+    DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
+
+    modeloTabela.setValueAt(nome,id,1); 
+    modeloTabela.setValueAt(idade, id, 2); 
+    modeloTabela.setValueAt(cpf, id, 3); 
+    modeloTabela.setValueAt(pacote, id, 4); 
+    modeloTabela.setValueAt(nivel, id, 5); 
+    modeloTabela.setValueAt(instrumento, id, 6); 
+}
+   
+     
+                           
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -36,9 +117,12 @@ public class lista_aluno extends javax.swing.JFrame {
         mostra_consulta = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         bt_menu = new javax.swing.JButton();
-        bt_perfil = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
+        recebe_nome = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        bt_atualizar = new javax.swing.JButton();
+        bt_excluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -52,27 +136,24 @@ public class lista_aluno extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 81, 177));
         jLabel1.setText("ALUNOS");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, -1, -1));
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         mostra_consulta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "NOME", "IDADE", "CPF", "PACOTE DE AULA", "NÍVEL", "INSTRUMENTO"
             }
         ));
         mostra_consulta.setToolTipText("Consultas");
         jScrollPane1.setViewportView(mostra_consulta);
 
-        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 280));
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 230));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 570, 280));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 570, 230));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/100x100.png"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
@@ -86,13 +167,7 @@ public class lista_aluno extends javax.swing.JFrame {
                 bt_menuActionPerformed(evt);
             }
         });
-        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, 30, 30));
-
-        bt_perfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bt_perfil.setForeground(new java.awt.Color(255, 255, 255));
-        bt_perfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/do-utilizador.png"))); // NOI18N
-        bt_perfil.setToolTipText("Perfil");
-        jPanel1.add(bt_perfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 10, 30, 30));
+        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 10, 30, 30));
 
         bt_sair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_sair.setForeground(new java.awt.Color(255, 255, 255));
@@ -110,6 +185,43 @@ public class lista_aluno extends javax.swing.JFrame {
         jPanel4.setLayout(new java.awt.BorderLayout());
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 690, 20));
 
+        recebe_nome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recebe_nomeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(recebe_nome, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, 260, -1));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 81, 177));
+        jLabel2.setLabelFor(recebe_nome);
+        jLabel2.setText("PESQUISAR POR NOME:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, -1, -1));
+
+        bt_atualizar.setBackground(new java.awt.Color(51, 140, 233));
+        bt_atualizar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bt_atualizar.setForeground(new java.awt.Color(255, 255, 255));
+        bt_atualizar.setText("ATUALIZAR");
+        bt_atualizar.setToolTipText("Clique para acessar a tela de atualização");
+        bt_atualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_atualizarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bt_atualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 360, -1, -1));
+
+        bt_excluir.setBackground(new java.awt.Color(255, 51, 51));
+        bt_excluir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bt_excluir.setForeground(new java.awt.Color(255, 255, 255));
+        bt_excluir.setText("EXCLUIR");
+        bt_excluir.setToolTipText("Clique para excluir");
+        bt_excluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_excluirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bt_excluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 360, -1, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 410));
 
         pack();
@@ -117,20 +229,32 @@ public class lista_aluno extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_menuActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-        Cadastro_aluno aluno = new Cadastro_aluno();
+        Cadastro_aluno aluno = new Cadastro_aluno(usuarioLogado);
         aluno.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void recebe_nomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recebe_nomeActionPerformed
+        preencherTabela();
+    }//GEN-LAST:event_recebe_nomeActionPerformed
+
+    private void bt_excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_excluirActionPerformed
+        excluirLinhaSelecionada();
+    }//GEN-LAST:event_bt_excluirActionPerformed
+
+    private void bt_atualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_atualizarActionPerformed
+        aluno_atualizar aluno = new aluno_atualizar(usuarioLogado);
+        aluno.setVisible(true);
+        dispose();          
+    }//GEN-LAST:event_bt_atualizarActionPerformed
+
+ 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -165,15 +289,18 @@ public class lista_aluno extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bt_atualizar;
+    private javax.swing.JButton bt_excluir;
     private javax.swing.JButton bt_menu;
-    private javax.swing.JButton bt_perfil;
     private javax.swing.JButton bt_sair;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable mostra_consulta;
+    private javax.swing.JTextField recebe_nome;
     // End of variables declaration//GEN-END:variables
 }

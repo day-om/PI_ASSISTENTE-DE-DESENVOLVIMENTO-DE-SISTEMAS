@@ -1,21 +1,26 @@
 
 package Telas;
 
+import Classes.Aluno;
 import Classes.Aula;
-import Classes.Lista_aula;
-import Classes.Lista_prof;
-import Classes.Professor;
+import Classes.Conexao_bd;
+import Classes.Usuario;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+
 
 
 public class nova_aula extends javax.swing.JFrame {
-
-    public Lista_aula listaAula;
+        
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
+   
     
-    public nova_aula(Lista_aula listaAula) {
+    public nova_aula() {
         initComponents();
-        this.listaAula = listaAula;
+        
+    }
+
+    nova_aula(Usuario usuarioLogado) {
+        initComponents();
     }
 
     /**
@@ -27,10 +32,10 @@ public class nova_aula extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         bt_menu = new javax.swing.JButton();
-        bt_perfil = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -40,10 +45,15 @@ public class nova_aula extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         recebe_nome = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        recebe_instrumento = new javax.swing.JComboBox<>();
         recebe_horario = new javax.swing.JComboBox<>();
+        bt_pesquisar = new javax.swing.JButton();
+        recebe_id = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        recebe_data = new javax.swing.JTextField();
+
+        jLabel5.setText("jLabel5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -65,13 +75,7 @@ public class nova_aula extends javax.swing.JFrame {
                 bt_menuActionPerformed(evt);
             }
         });
-        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 30, 30));
-
-        bt_perfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bt_perfil.setForeground(new java.awt.Color(255, 255, 255));
-        bt_perfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/do-utilizador.png"))); // NOI18N
-        bt_perfil.setToolTipText("Perfil");
-        jPanel1.add(bt_perfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 30, 30));
+        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 30, 30));
 
         bt_sair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_sair.setForeground(new java.awt.Color(255, 255, 255));
@@ -123,31 +127,49 @@ public class nova_aula extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setLabelFor(recebe_nome);
-        jLabel2.setText("ALUNO(A):");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        jLabel2.setLabelFor(recebe_id);
+        jLabel2.setText("ID");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 20, 20));
 
         recebe_nome.setToolTipText("Digite o nome do aluno(a)");
-        jPanel3.add(recebe_nome, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 400, -1));
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setLabelFor(recebe_instrumento);
-        jLabel3.setText("INSTRUMENTO:");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+        jPanel3.add(recebe_nome, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 410, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("HORÁRIOS:");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
-
-        recebe_instrumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Teclado", "Violão", "Flauta", " " }));
-        recebe_instrumento.setToolTipText("Escolha o instrumento");
-        jPanel3.add(recebe_instrumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 100, -1, -1));
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
 
         recebe_horario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MANHÃ - 1°", "MANHÃ - 2°", "MANHÃ - 3°", "MANHÃ - 4°", "MANHÃ - 5°", "TARDE - 1°", "TARDE - 2°", "TARDE - 3°", "TARDE - 4°", "TARDE - 5°" }));
         recebe_horario.setToolTipText("Escolha o horário");
-        jPanel3.add(recebe_horario, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 140, -1));
+        jPanel3.add(recebe_horario, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 140, -1));
+
+        bt_pesquisar.setText("Pesquisar");
+        bt_pesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_pesquisarActionPerformed(evt);
+            }
+        });
+        jPanel3.add(bt_pesquisar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+
+        recebe_id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recebe_idActionPerformed(evt);
+            }
+        });
+        jPanel3.add(recebe_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(344, 70, 90, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setLabelFor(recebe_nome);
+        jLabel3.setText("DATA:");
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setLabelFor(recebe_nome);
+        jLabel6.setText("ALUNO(A):");
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        jPanel3.add(recebe_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 130, -1));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, 470, 220));
 
@@ -158,40 +180,117 @@ public class nova_aula extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_menuActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-        menu_aula aula = new menu_aula();
+        menu_aula aula = new menu_aula(usuarioLogado);
         aula.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
-        String nome = recebe_nome.getText();
-        String instrumento = (String) recebe_instrumento.getSelectedItem();
-        String horario = (String) recebe_horario.getSelectedItem();
-      
-        if (nome.isEmpty()){
-        JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
+        int aluno = Integer.parseInt(recebe_id.getText());;
+        String data = recebe_data.getText();
+        String h = (String) recebe_horario.getSelectedItem();
+        int horario = 0;
+            
+        switch (h){
+        case "MANHÃ - 1°":
+           horario = 1;
+        break;
+        case "MANHÃ - 2°":
+            horario = 2;
+        break;
+        case "MANHÃ - 3°":
+            horario = 3;
+        break;
+        case "MANHÃ - 4°":
+            horario = 4;
+        break;
+        case "MANHÃ - 5°":
+            horario = 5;
+        break;
+        case "TARDE - 1°":
+            horario = 6;
+        break;
+        case "TARDE - 2°":
+            horario = 7;
+        break;
+        case "TARDE - 3°":
+            horario = 8;
+        break;
+         case "TARDE - 4°":
+            horario = 9;
+        break;
+         case "TARDE - 5°":
+            horario = 10;
+        break;
+        default:
+            JOptionPane.showMessageDialog(null, "Horário inválido"); 
         return;
-        }   
-        if(!nome.matches("[a-zA-Z]+")){
-        JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!"); 
-        return; 
         }
                 
-        Aula aula = new Aula(nome,instrumento,horario);
-        listaAula.Adicionar(aula);
+        Aula aula = new Aula(aluno,data,horario);       
         
-        JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+        Conexao_bd dao;
+        boolean status;
+        int resposta;
+        
+        dao = new Conexao_bd();
+        status = dao.conectar();
+        if(status == false){
+            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        }else{
+            resposta = dao.salvarAula(aula);
             
-        recebe_nome.setText("");
+            if(resposta == 1){
+                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
+               
+                recebe_nome.setText("");
+                recebe_id.setText("");
+                recebe_data.setText("");
+                recebe_nome.requestFocus();
+                
+            }else if (resposta ==1062){
+                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
+            }else{
+                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
+            }
+            dao.desconectar();
+        }
+        
         
         
     }//GEN-LAST:event_bt_enviarActionPerformed
+
+    private void bt_pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pesquisarActionPerformed
+            String nome;
+            nome = recebe_nome.getText();
+            
+            Conexao_bd dao = new Conexao_bd();
+            boolean status = dao.conectar();
+            
+            if(status == true){
+                Aluno aluno = dao.consultarAluno(nome);
+                System.out.println(dao.consultarAluno(nome));
+                if(aluno == null){
+                    JOptionPane.showMessageDialog(null,"Aluno não localizado!");
+                }else{
+                    recebe_nome.setText(aluno.getNome());  
+                    recebe_id.setText(Integer.toString(aluno.getId()));
+                }
+                dao.desconectar();
+            }else{
+                JOptionPane.showMessageDialog(null,"Erro de conexão");
+            }
+    }//GEN-LAST:event_bt_pesquisarActionPerformed
+
+    private void recebe_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recebe_idActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recebe_idActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,13 +322,9 @@ public class nova_aula extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DefaultTableModel tabela_aula = new DefaultTableModel(
-                        new Object[]{"Aluno","Instrumento","Horário"},
-                        0
-                );
-                Lista_aula listaAula = new Lista_aula(tabela_aula);
-                new nova_aula(listaAula).setVisible(true);
+            public void run() {              
+                
+                new nova_aula().setVisible(true);
             }
         });
     }
@@ -238,19 +333,22 @@ public class nova_aula extends javax.swing.JFrame {
     private javax.swing.JButton bt_enviar;
     private javax.swing.JButton bt_limpar;
     private javax.swing.JButton bt_menu;
-    private javax.swing.JButton bt_perfil;
+    private javax.swing.JButton bt_pesquisar;
     private javax.swing.JButton bt_sair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JTextField recebe_data;
     private javax.swing.JComboBox<String> recebe_horario;
-    private javax.swing.JComboBox<String> recebe_instrumento;
+    private javax.swing.JTextField recebe_id;
     private javax.swing.JTextField recebe_nome;
     // End of variables declaration//GEN-END:variables
 }

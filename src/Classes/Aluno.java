@@ -2,21 +2,37 @@
 package Classes;
 
 public class Aluno {
+    int id; 
     String nome;
     String idade;
     String cpf;
-    String pacote;
-    String instrumento;
-    String nivel;
+    int pacote;
+    int instrumento;
+    int nivel;
+    
+    public Aluno(){
+        
+    };
 
-    public Aluno(String nome, String idade, String cpf, String pacote, String instrumento, String nivel) {
+    public Aluno(String nome, String idade, String cpf, int pacote, int nivel, int instrumento) {
+        this.id = id;
         this.nome = nome;
         this.idade = idade;
         this.cpf = cpf;
         this.pacote = pacote;
-        this.instrumento = instrumento;
         this.nivel = nivel;
+        this.instrumento = instrumento;
+        
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
 
     public String getNome() {
         return nome;
@@ -42,27 +58,27 @@ public class Aluno {
         this.cpf = cpf;
     }
 
-    public String getPacote() {
+    public int getPacote() {
         return pacote;
     }
 
-    public void setPacote(String pacote) {
+    public void setPacote(int pacote) {
         this.pacote = pacote;
     }
 
-    public String getInstrumento() {
+    public int getInstrumento() {
         return instrumento;
     }
 
-    public void setInstrumento(String instrumento) {
+    public void setInstrumento(int instrumento) {
         this.instrumento = instrumento;
     }
 
-    public String getNivel() {
+    public int getNivel() {
         return nivel;
     }
 
-    public void setNivel(String nivel) {
+    public void setNivel(int nivel) {
         this.nivel = nivel;
     }
     

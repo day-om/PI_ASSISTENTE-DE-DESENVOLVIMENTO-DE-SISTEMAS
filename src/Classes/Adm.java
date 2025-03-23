@@ -1,14 +1,26 @@
-
 package Classes;
 
-
 public class Adm {
-    String nome;
-    String funcao;
 
-    public Adm(String nome, String funcao) {
+    int id;
+    String nome;
+    int funcao;
+
+    public Adm() {
+
+    }
+
+    public Adm(String nome, int funcao) {
         this.nome = nome;
         this.funcao = funcao;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -19,13 +31,12 @@ public class Adm {
         this.nome = nome;
     }
 
-    public String getFuncao() {
+    public int getFuncao() {
         return funcao;
     }
 
-    public void setFuncao(String funcao) {
+    public void setFuncao(int funcao) {
         this.funcao = funcao;
     }
-    
-    
+
 }

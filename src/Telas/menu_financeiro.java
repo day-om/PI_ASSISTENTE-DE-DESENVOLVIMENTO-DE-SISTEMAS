@@ -1,22 +1,45 @@
 
 package Telas;
 
-import Classes.Lista_entrada;
-import Classes.Lista_saida;
+
+import Classes.Usuario;
 import javax.swing.table.DefaultTableModel;
 
  
 public class menu_financeiro extends javax.swing.JFrame {
 
-    public Lista_entrada listaEntrada;
-    public Lista_saida listaSaida;
+    
     private DefaultTableModel tabela;
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
     
     public menu_financeiro() {
         initComponents();
-        listaEntrada = new Lista_entrada(tabela);
-        listaSaida = new Lista_saida(tabela);
+        
     }
+
+    menu_financeiro(Usuario usuarioLogado) {
+        initComponents();
+        int tipo;
+        tipo = usuarioLogado.getTipoUsuario();
+        switch(tipo){
+            case 1:
+            bt_cadastro.setEnabled(true);
+            bt_aulas.setEnabled(true);
+            bt_financeiro.setEnabled(true); 
+            break;
+            case 2:
+            bt_cadastro.setEnabled(true);
+            bt_aulas.setEnabled(true);
+            bt_financeiro.setEnabled(false); 
+            break;
+            case 3:
+            bt_cadastro.setEnabled(false);
+            bt_aulas.setEnabled(true);
+            bt_financeiro.setEnabled(false); 
+            break;
+        }
+    }
+
 
 
     /**
@@ -30,7 +53,6 @@ public class menu_financeiro extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         bt_menu = new javax.swing.JButton();
-        bt_perfil = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -59,13 +81,7 @@ public class menu_financeiro extends javax.swing.JFrame {
                 bt_menuActionPerformed(evt);
             }
         });
-        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, 30, 30));
-
-        bt_perfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bt_perfil.setForeground(new java.awt.Color(255, 255, 255));
-        bt_perfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/do-utilizador.png"))); // NOI18N
-        bt_perfil.setToolTipText("Perfil");
-        jPanel1.add(bt_perfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 30, 30));
+        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 30, 30));
 
         bt_sair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_sair.setForeground(new java.awt.Color(255, 255, 255));
@@ -162,43 +178,43 @@ public class menu_financeiro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_financeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_financeiroActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_financeiroActionPerformed
 
     private void bt_entradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_entradaActionPerformed
-        nova_entrada menu = new nova_entrada(listaEntrada);
+        nova_entrada menu = new nova_entrada(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_entradaActionPerformed
 
     private void bt_saidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_saidaActionPerformed
-        nova_saida menu = new nova_saida(listaSaida);
+        nova_saida menu = new nova_saida(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_saidaActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_menuActionPerformed
 
     private void bt_aulasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_aulasActionPerformed
-        menu_aula aula = new menu_aula();
+        menu_aula aula = new menu_aula(usuarioLogado);
         aula.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_aulasActionPerformed
 
     private void bt_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cadastroActionPerformed
-        menu_cadastrar menu = new menu_cadastrar();
+        menu_cadastrar menu = new menu_cadastrar(usuarioLogado);
         menu.setVisible(true);
         dispose();
         
@@ -243,7 +259,6 @@ public class menu_financeiro extends javax.swing.JFrame {
     private javax.swing.JButton bt_entrada;
     private javax.swing.JButton bt_financeiro;
     private javax.swing.JButton bt_menu;
-    private javax.swing.JButton bt_perfil;
     private javax.swing.JButton bt_saida;
     private javax.swing.JButton bt_sair;
     private javax.swing.JLabel jLabel1;

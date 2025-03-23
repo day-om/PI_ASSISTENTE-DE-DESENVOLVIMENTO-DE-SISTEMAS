@@ -1,20 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Telas;
 
+import Classes.Conexao_bd;
+import Classes.Usuario;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author dayan
- */
+
+
 public class Login extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Login
-     */
+    
     public Login() {
         initComponents();
         AtalhoAcessibilidade();
@@ -56,7 +57,7 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setLabelFor(recebe_usuario);
-        jLabel1.setText("Usuário");
+        jLabel1.setText("Login");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, -1, -1));
 
         recebe_usuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -83,6 +84,11 @@ public class Login extends javax.swing.JFrame {
         bt_limpar.setText("Limpar");
         bt_limpar.setToolTipText("Clique para limpar os dados");
         bt_limpar.setNextFocusableComponent(recebe_usuario);
+        bt_limpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_limparActionPerformed(evt);
+            }
+        });
         jPanel1.add(bt_limpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, 100, 30));
 
         bt_enviar.setBackground(new java.awt.Color(51, 81, 177));
@@ -124,9 +130,52 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
-        Menu_inicial menu = new Menu_inicial();
-        menu.setVisible(true);
-        dispose();
+       Conexao_bd conexao = new Conexao_bd();
+       String login = recebe_usuario.getText();
+       String senha = recebe_senha.getText();
+       
+       Usuario usuario = conexao. validarLogin(login, senha);
+       
+        if (usuario != null) {            
+            
+            int tipo = usuario.getTipoUsuario();
+            Usuario usuariolog = new Usuario(login,senha,tipo);
+            
+            Usuario.setUsuarioLogado(usuariolog);
+
+           switch (tipo) {
+               case 1:
+                   {
+                       Menu_inicial menu = new Menu_inicial(usuario);
+                       menu.setVisible(true);
+                       dispose();
+                       JOptionPane.showMessageDialog(null,"Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
+                       break;
+                   }
+               case 2:
+                   {
+                       Menu_inicial menu = new Menu_inicial(usuario);
+                       menu.setVisible(true);
+                       dispose();
+                       JOptionPane.showMessageDialog(null,"Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
+                       break;
+                   }
+               case 3:
+                        Menu_inicial menu = new Menu_inicial(usuario);
+                        menu.setVisible(true);
+                        dispose();
+                        JOptionPane.showMessageDialog(null,"Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
+                        break;
+                        default:
+                   JOptionPane.showMessageDialog(null,"Tipo de usuário não encontrado!");
+                   break;
+           }
+        } else {
+           JOptionPane.showMessageDialog(null,"Usuário ou senha inválidos.");
+        }
+           
+        
+        
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
@@ -134,6 +183,12 @@ public class Login extends javax.swing.JFrame {
         inicio.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
+
+    private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
+        recebe_usuario.setText("");
+        recebe_senha.setText("");
+        recebe_usuario.requestFocus();
+    }//GEN-LAST:event_bt_limparActionPerformed
 
     /**
      * @param args the command line arguments
@@ -183,4 +238,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField recebe_senha;
     private javax.swing.JTextField recebe_usuario;
     // End of variables declaration//GEN-END:variables
+
+
 }

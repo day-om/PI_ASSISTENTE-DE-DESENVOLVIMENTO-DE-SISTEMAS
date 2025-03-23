@@ -2,9 +2,9 @@
 package Telas;
 
 import Classes.Adm;
-import Classes.Lista_adm;
-import Classes.Lista_prof;
+import Classes.Conexao_bd;
 import Classes.Professor;
+import Classes.Usuario;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,11 +14,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class novo_adm extends javax.swing.JFrame {
 
-    public Lista_adm listaAdm;
+   Usuario usuarioLogado = Usuario.getUsuarioLogado();
     
-    public novo_adm(Lista_adm listaAdm) {
+    public novo_adm() {
         initComponents();
-        this.listaAdm = listaAdm;
+       
+    }
+
+    novo_adm(Usuario usuarioLogado) {
+        initComponents();
     }
 
     
@@ -38,7 +42,6 @@ public class novo_adm extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         bt_menu = new javax.swing.JButton();
-        bt_perfil = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
 
@@ -120,13 +123,7 @@ public class novo_adm extends javax.swing.JFrame {
                 bt_menuActionPerformed(evt);
             }
         });
-        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 30, 30));
-
-        bt_perfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bt_perfil.setForeground(new java.awt.Color(255, 255, 255));
-        bt_perfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/do-utilizador.png"))); // NOI18N
-        bt_perfil.setToolTipText("Perfil");
-        jPanel1.add(bt_perfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 30, 30));
+        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 30, 30));
 
         bt_sair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_sair.setForeground(new java.awt.Color(255, 255, 255));
@@ -151,13 +148,13 @@ public class novo_adm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_menuActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-        Cadastro_adm adm = new Cadastro_adm();
+        Cadastro_adm adm = new Cadastro_adm(usuarioLogado);
         adm.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
@@ -165,7 +162,7 @@ public class novo_adm extends javax.swing.JFrame {
     private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
         String nome = recebe_nome.getText();
         String funcao = (String) recebe_funcao.getSelectedItem();
-       
+        int funcao_adm = 0;       
       
         if (nome.isEmpty()){
         JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
@@ -175,14 +172,47 @@ public class novo_adm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!"); 
         return; 
         }
-
+        switch (funcao) {
+        case "Gestor":
+           funcao_adm = 1;
+        break;
+        case "Aux.Administrativo":
+            funcao_adm = 2;
+        break;
         
-        Adm adm = new Adm(nome,funcao);
-        listaAdm.Adicionar(adm);
+        default:
+            JOptionPane.showMessageDialog(null, "Função inválida"); 
+        return;
+        }
         
-        JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+        Adm adm = new Adm(nome,funcao_adm);        
+        
+        Conexao_bd dao;
+        boolean status;
+        int resposta;
+        
+        dao = new Conexao_bd();
+        status = dao.conectar();
+        if(status == false){
+            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        }else{
+            resposta = dao.salvarAdm(adm);
             
-        recebe_nome.setText("");
+            if(resposta == 1){
+                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
+               
+                recebe_nome.setText("");
+                recebe_nome.requestFocus();
+                
+            }else if (resposta ==1062){
+                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
+            }else{
+                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
+            }
+            dao.desconectar();
+        }
+
+   
         
     }//GEN-LAST:event_bt_enviarActionPerformed
 
@@ -221,12 +251,8 @@ public class novo_adm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                 DefaultTableModel tabela_adm = new DefaultTableModel(
-                        new Object[]{"Admnistrador","Função"},
-                        0
-                );
-                Lista_adm listaAdm = new Lista_adm(tabela_adm);
-                new novo_adm(listaAdm).setVisible(true);
+            
+                new novo_adm().setVisible(true);
             }
         });
     }
@@ -235,7 +261,6 @@ public class novo_adm extends javax.swing.JFrame {
     private javax.swing.JButton bt_enviar;
     private javax.swing.JButton bt_limpar;
     private javax.swing.JButton bt_menu;
-    private javax.swing.JButton bt_perfil;
     private javax.swing.JButton bt_sair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

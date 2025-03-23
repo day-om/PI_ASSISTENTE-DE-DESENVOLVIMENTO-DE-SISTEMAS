@@ -2,19 +2,46 @@
 
 package Telas;
 
-import Classes.Lista_aula;
-import Classes.Lista_prof;
+
+import Classes.Usuario;
 import javax.swing.table.DefaultTableModel;
 
 
 public class menu_aula extends javax.swing.JFrame {
 
-     public Lista_aula listaAula;
+    
      private DefaultTableModel tabela;
+     Usuario usuarioLogado = Usuario.getUsuarioLogado();
      
     public menu_aula() {
         initComponents();
-        listaAula = new Lista_aula(tabela);
+        
+    }
+
+    menu_aula(Usuario usuarioLogado) {
+        initComponents();
+        int tipo;
+        tipo = usuarioLogado.getTipoUsuario();
+        switch(tipo){
+            case 1:
+            bt_cadastro.setEnabled(true);
+            bt_aulas.setEnabled(true);
+            bt_financeiro.setEnabled(true); 
+            break;
+            case 2:
+            bt_cadastro.setEnabled(true);
+            bt_aulas.setEnabled(true);
+            bt_financeiro.setEnabled(false); 
+            break;
+            case 3:
+            bt_cadastro.setEnabled(false);
+            bt_aulas.setEnabled(true);
+            bt_financeiro.setEnabled(false); 
+            bt_nova.setEnabled(false);
+            bt_consulta.setEnabled(false);
+            bt_diario.setEnabled(true);
+            break;
+        }
     }
 
     /**
@@ -28,7 +55,6 @@ public class menu_aula extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         bt_menu = new javax.swing.JButton();
-        bt_perfil = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         bt_cadastro = new javax.swing.JButton();
@@ -39,6 +65,7 @@ public class menu_aula extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         bt_nova = new javax.swing.JButton();
+        bt_diario = new javax.swing.JButton();
         bt_consulta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -57,13 +84,7 @@ public class menu_aula extends javax.swing.JFrame {
                 bt_menuActionPerformed(evt);
             }
         });
-        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, 30, 30));
-
-        bt_perfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bt_perfil.setForeground(new java.awt.Color(255, 255, 255));
-        bt_perfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/do-utilizador.png"))); // NOI18N
-        bt_perfil.setToolTipText("Perfil");
-        jPanel1.add(bt_perfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 30, 30));
+        jPanel1.add(bt_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 30, 30));
 
         bt_sair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bt_sair.setForeground(new java.awt.Color(255, 255, 255));
@@ -141,6 +162,18 @@ public class menu_aula extends javax.swing.JFrame {
         });
         jPanel1.add(bt_nova, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 160, 40));
 
+        bt_diario.setBackground(new java.awt.Color(51, 140, 233));
+        bt_diario.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        bt_diario.setForeground(new java.awt.Color(255, 255, 255));
+        bt_diario.setText("DIÁRIO");
+        bt_diario.setToolTipText("Clique para registrar as aulas realizadas");
+        bt_diario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_diarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bt_diario, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 340, 160, 40));
+
         bt_consulta.setBackground(new java.awt.Color(51, 140, 233));
         bt_consulta.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
         bt_consulta.setForeground(new java.awt.Color(255, 255, 255));
@@ -160,46 +193,52 @@ public class menu_aula extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_novaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_novaActionPerformed
-        nova_aula menu = new nova_aula(listaAula);
+        nova_aula menu = new nova_aula(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_novaActionPerformed
 
-    private void bt_consultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_consultaActionPerformed
-        lista_aula menu = new lista_aula();
-        menu.setVisible(true);
+    private void bt_diarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_diarioActionPerformed
+        Diario_aulas diario = new Diario_aulas(usuarioLogado);
+        diario.setVisible(true);
         dispose();
-    }//GEN-LAST:event_bt_consultaActionPerformed
+    }//GEN-LAST:event_bt_diarioActionPerformed
 
     private void bt_aulasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_aulasActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_aulasActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-      Menu_inicial menu = new Menu_inicial();
+      Menu_inicial menu = new Menu_inicial(usuarioLogado);
       menu.setVisible(true);
       dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
-        Menu_inicial menu = new Menu_inicial();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_menuActionPerformed
 
     private void bt_financeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_financeiroActionPerformed
-        menu_financeiro menu = new menu_financeiro();
+        menu_financeiro menu = new menu_financeiro(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_financeiroActionPerformed
 
     private void bt_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cadastroActionPerformed
-        menu_cadastrar menu = new menu_cadastrar();
+        menu_cadastrar menu = new menu_cadastrar(usuarioLogado);
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_cadastroActionPerformed
+
+    private void bt_consultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_consultaActionPerformed
+        lista_aula aula = new lista_aula();
+        aula.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_bt_consultaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -240,10 +279,10 @@ public class menu_aula extends javax.swing.JFrame {
     private javax.swing.JButton bt_aulas;
     private javax.swing.JButton bt_cadastro;
     private javax.swing.JButton bt_consulta;
+    private javax.swing.JButton bt_diario;
     private javax.swing.JButton bt_financeiro;
     private javax.swing.JButton bt_menu;
     private javax.swing.JButton bt_nova;
-    private javax.swing.JButton bt_perfil;
     private javax.swing.JButton bt_sair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

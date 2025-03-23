@@ -3,37 +3,50 @@ package Classes;
 
 
 public class Aula {
-    String aluno;
-    String instrumento;
-    String horario;
+    int id;
+    int aluno;
+    int horario;
+    String data;
 
-    public Aula(String aluno, String instrumento, String horario) {
+    public Aula(int aluno,String data,int horario) {
         this.aluno = aluno;
-        this.instrumento = instrumento;
+        this.data = data;
         this.horario = horario;
     }
+    public Aula(){
+        
+    }
 
-    public String getAluno() {
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getAluno() {
         return aluno;
     }
 
-    public void setAluno(String aluno) {
+    public void setAluno(int aluno) {
         this.aluno = aluno;
     }
 
-    public String getInstrumento() {
-        return instrumento;
-    }
-
-    public void setInstrumento(String instrumento) {
-        this.instrumento = instrumento;
-    }
-
-    public String getHorario() {
+    public int getHorario() {
         return horario;
     }
 
-    public void setHorario(String horario) {
+    public void setHorario(int horario) {
         this.horario = horario;
     }
     

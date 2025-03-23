@@ -3,14 +3,28 @@ package Classes;
 
 
 public class Saida {
+    int id;
     String descricao;
     String data;
     Double valor;
+    int usuario;
 
-    public Saida(String descricao, String data, Double valor) {
+    public Saida(String descricao, String data, Double valor, int usuario) {
         this.descricao = descricao;
         this.data = data;
         this.valor = valor;
+        this.usuario = usuario;
+    }
+    public Saida(){
+        
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescricao() {
@@ -35,6 +49,14 @@ public class Saida {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    public int getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(int usuario) {
+        this.usuario = usuario;
     }
     
     
