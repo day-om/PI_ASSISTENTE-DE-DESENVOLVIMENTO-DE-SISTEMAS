@@ -1,34 +1,31 @@
-
-
 package Telas;
 
-import Classes.Conexao_bd;
 import Classes.Professor;
 import Classes.Usuario;
+import DAO.ProfessorDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-
 public class lista_professor extends javax.swing.JFrame {
 
     public DefaultTableModel tabela;
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
-    
+
     public lista_professor() {
         initComponents();
-        preencherTabela();       
-        
+        preencherTabela();
+
     }
 
     lista_professor(Usuario usuarioLogado) {
         initComponents();
-        preencherTabela(); 
+        preencherTabela();
     }
-     private void preencherTabela() {
-        Conexao_bd dao = new Conexao_bd();
+
+    private void preencherTabela() {
+        ProfessorDAO dao = new ProfessorDAO();
 
         String nome = recebe_nome.getText();
         List<Professor> listaProf = dao.getProfessor(nome);
@@ -38,7 +35,7 @@ public class lista_professor extends javax.swing.JFrame {
 
         mostra_consulta.setRowSorter(new TableRowSorter(tabelaProf));
         if (listaProf != null) {
-            for (Professor c : listaProf)    {
+            for (Professor c : listaProf) {
                 Object[] obj = new Object[]{
                     c.getIdProfessor(),
                     c.getNome(),
@@ -48,43 +45,45 @@ public class lista_professor extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Lista de professores vazia!");
         }
-     }
-   private boolean excluirDoBanco(int id) {
-    Conexao_bd dao = new Conexao_bd();
-    boolean excluido = dao.excluirAluno(id); 
-
-    if (excluido) {
-        return true;
-    } else {
-        return false;
     }
-    
-}
-    private void excluirLinhaSelecionada() {
-    int linhaSelecionada = mostra_consulta.getSelectedRow();
-    if (linhaSelecionada != -1) {
-        
-        int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
-        
-        int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?", 
-                                                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
-        if (resposta == JOptionPane.YES_OPTION) {
-            
-            boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
 
-            if (excluidoComSucesso) {
-                DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
-                modeloTabela.removeRow(linhaSelecionada);
-                JOptionPane.showMessageDialog(null, "Professor excluído com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Não é possível excluir esse professor, pois existem registros associados a ele.");
-            }
+    private boolean excluirDoBanco(int id) {
+        ProfessorDAO dao = new ProfessorDAO();
+        boolean excluido = dao.excluirProf(id);
+
+        if (excluido) {
+            return true;
+        } else {
+            return false;
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+
     }
-}
-    
+
+    private void excluirLinhaSelecionada() {
+        int linhaSelecionada = mostra_consulta.getSelectedRow();
+        if (linhaSelecionada != -1) {
+
+            int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
+
+            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?",
+                    "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION) {
+
+                boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
+
+                if (excluidoComSucesso) {
+                    DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
+                    modeloTabela.removeRow(linhaSelecionada);
+                    JOptionPane.showMessageDialog(null, "Professor excluído com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não é possível excluir esse professor, pois existem registros associados a ele.");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -208,9 +207,9 @@ public class lista_professor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-       Cadastro_professores novo = new Cadastro_professores(usuarioLogado);
-       novo.setVisible(true);
-       dispose();
+        Cadastro_professores novo = new Cadastro_professores(usuarioLogado);
+        novo.setVisible(true);
+        dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
@@ -224,7 +223,7 @@ public class lista_professor extends javax.swing.JFrame {
     }//GEN-LAST:event_recebe_nomeActionPerformed
 
     private void bt_excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_excluirActionPerformed
-       excluirLinhaSelecionada();
+        excluirLinhaSelecionada();
     }//GEN-LAST:event_bt_excluirActionPerformed
 
     private void bt_atualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_atualizarActionPerformed

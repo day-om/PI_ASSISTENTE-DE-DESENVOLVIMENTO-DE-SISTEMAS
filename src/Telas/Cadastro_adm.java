@@ -1,20 +1,14 @@
-
 package Telas;
 
-
 import Classes.Usuario;
-import javax.swing.table.DefaultTableModel;
-
 
 public class Cadastro_adm extends javax.swing.JFrame {
 
-   
-    private DefaultTableModel tabela;
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+
     public Cadastro_adm() {
         initComponents();
-        
+
     }
 
     Cadastro_adm(Usuario usuarioLogado) {
@@ -142,7 +136,7 @@ public class Cadastro_adm extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_novoCadastroActionPerformed
 
     private void bt_consultarCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_consultarCadastroActionPerformed
-        lista_adm adm = new lista_adm (usuarioLogado);
+        lista_adm adm = new lista_adm(usuarioLogado);
         adm.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_consultarCadastroActionPerformed

@@ -1,24 +1,17 @@
-
 package Telas;
 
 import Classes.Aluno;
-import Classes.Conexao_bd;
-import Classes.Professor;
 import Classes.Usuario;
+import DAO.AlunoDAO;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author dayan
- */
 public class novo_aluno extends javax.swing.JFrame {
 
-     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public novo_aluno() {
         initComponents();
-    
+
     }
 
     novo_aluno(Usuario usuarioLogado) {
@@ -228,97 +221,87 @@ public class novo_aluno extends javax.swing.JFrame {
         int pacote = 0;
         int instrumento = 0;
         int nivel = 0;
-      
-        if (nome.isEmpty() || idade.isEmpty() || cpf.isEmpty()){
-        JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
-        return;
-        }   
-        if(!nome.matches("[a-zA-Z]+")){
-        JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!"); 
-        return; 
+
+        if (nome.isEmpty() || idade.isEmpty() || cpf.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
+            return;
         }
-        if(!idade.matches("[0-9]+")){
-        JOptionPane.showMessageDialog(null, "No campo (IDADE) insira apenas números!"); 
-        return;   
+        if (!nome.matches("[a-zA-Z]+")) {
+            JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!");
+            return;
         }
-        if(!cpf.matches("[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}")){
-        JOptionPane.showMessageDialog(null, "Formato de CPF inválido. Use os pontos e traço corretamente."); 
-        return;   
+        if (!idade.matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(null, "No campo (IDADE) insira apenas números!");
+            return;
         }
-        
+        if (!cpf.matches("[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}")) {
+            JOptionPane.showMessageDialog(null, "Formato de CPF inválido. Use os pontos e traço corretamente.");
+            return;
+        }
+
         switch (pct) {
-        case "3 aulas semanais":
-           pacote = 1;
-        break;
-        case "5 aulas semanais":
-            pacote = 2;
-        break;
-        default:
-            JOptionPane.showMessageDialog(null, "Pacote inválido"); 
-        return;
-        }        
-               
+            case "3 aulas semanais":
+                pacote = 1;
+                break;
+            case "5 aulas semanais":
+                pacote = 2;
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Pacote inválido");
+                return;
+        }
+
         switch (niv) {
-        case "Iniciante":
-           nivel = 1;
-        break;
-        case "Intermediário":
-            nivel = 2;
-        break;
-        case "Avançado":
-            nivel = 3;
-        break;
-        
-        default:
-            JOptionPane.showMessageDialog(null, "Nível inválido"); 
-        return;
+            case "Iniciante":
+                nivel = 1;
+                break;
+            case "Intermediário":
+                nivel = 2;
+                break;
+            case "Avançado":
+                nivel = 3;
+                break;
+
+            default:
+                JOptionPane.showMessageDialog(null, "Nível inválido");
+                return;
         }
-        
+
         switch (instru) {
-        case "Teclado":
-           instrumento = 1;
-        break;
-        case "Violão":
-            instrumento = 2;
-        break;
-        case "Flauta":
-            instrumento = 3;
-        break;
-        
-        default:
-            JOptionPane.showMessageDialog(null, "Instrumento inválido"); 
-        return;
+            case "Teclado":
+                instrumento = 1;
+                break;
+            case "Violão":
+                instrumento = 2;
+                break;
+            case "Flauta":
+                instrumento = 3;
+                break;
+
+            default:
+                JOptionPane.showMessageDialog(null, "Instrumento inválido");
+                return;
         }
-                
-        Aluno aluno = new Aluno (nome,idade,cpf,pacote,nivel,instrumento);
-      
-        
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
-        
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.salvarAluno(aluno);
-            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-               
-                recebe_nome.setText("");
-                recebe_idade.setText("");
-                recebe_cpf.setText("");
-                recebe_nome.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
+
+        Aluno aluno = new Aluno(nome, idade, cpf, pacote, nivel, instrumento);
+
+        AlunoDAO dao = new AlunoDAO();
+        int resposta = dao.salvarAluno(aluno);
+
+        if (resposta == 1) {
+            JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso");
+
+            recebe_nome.setText("");
+            recebe_idade.setText("");
+            recebe_cpf.setText("");
+            recebe_nome.requestFocus();
+
+        } else if (resposta == 1062) {
+            JOptionPane.showMessageDialog(null, "Erro no cadastrado");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
         }
+
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
@@ -362,8 +345,7 @@ public class novo_aluno extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
-               
+
                 new novo_aluno().setVisible(true);
             }
         });

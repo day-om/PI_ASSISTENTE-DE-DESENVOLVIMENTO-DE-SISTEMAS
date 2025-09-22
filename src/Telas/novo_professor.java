@@ -1,29 +1,23 @@
-
-
 package Telas;
 
-import Classes.Conexao_bd;
 import Classes.Professor;
 import Classes.Usuario;
+import DAO.ProfessorDAO;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-
 
 public class novo_professor extends javax.swing.JFrame {
 
-    
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+
     public novo_professor() {
         initComponents();
-        
+
     }
 
-   public novo_professor(Usuario usuario) {
-       initComponents();
+    public novo_professor(Usuario usuario) {
+        initComponents();
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -164,67 +158,55 @@ public class novo_professor extends javax.swing.JFrame {
         String nome = recebe_nome.getText();
         String instru = (String) recebe_instrumento.getSelectedItem();
         int instrumento = 0;
-     
-        if (nome.isEmpty() || instru.isEmpty()){
-        JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
-        return;
-        }   
-        if(!nome.matches("[a-zA-Z]+")){
-        JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!"); 
-        return; 
+
+        if (nome.isEmpty() || instru.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
+            return;
         }
-        
+        if (!nome.trim().matches("[a-zA-ZÀ-ÖØ-öø-ÿ ]+")) {
+            JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!");
+            return;
+        }
+
         switch (instru) {
-        case "Teclado":
-           instrumento = 1;
-        break;
-        case "Violão":
-            instrumento = 2;
-        break;
-        case "Flauta":
-            instrumento = 3;
-        break;
-        
-        default:
-            JOptionPane.showMessageDialog(null, "Instrumento inválido"); 
-        return;
+            case "Teclado":
+                instrumento = 1;
+                break;
+            case "Violão":
+                instrumento = 2;
+                break;
+            case "Flauta":
+                instrumento = 3;
+                break;
+
+            default:
+                JOptionPane.showMessageDialog(null, "Instrumento inválido");
+                return;
         }
-             
-        Professor professor = new Professor(nome,instrumento);
-        
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
-        
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.salvarProf(professor);
-            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-               
-                recebe_nome.setText("");
-                recebe_nome.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
+
+        Professor professor = new Professor(nome, instrumento);
+        ProfessorDAO dao = new ProfessorDAO();
+        int resposta = dao.salvarProf(professor);
+
+        if (resposta == 1) {
+            JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso");
+
+            recebe_nome.setText("");
+            recebe_nome.requestFocus();
+
+        } else if (resposta == 1062) {
+            JOptionPane.showMessageDialog(null, "Erro no cadastrado");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
+
         }
-        
-        
-           
-        
+
+
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
         recebe_nome.setText("");
-        
+
     }//GEN-LAST:event_bt_limparActionPerformed
 
     /**
@@ -260,8 +242,7 @@ public class novo_professor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                              
-                                
+
                 new novo_professor().setVisible(true);
             }
         });

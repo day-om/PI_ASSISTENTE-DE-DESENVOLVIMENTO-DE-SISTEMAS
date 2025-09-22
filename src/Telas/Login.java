@@ -1,30 +1,22 @@
-
 package Telas;
 
-import Classes.Conexao_bd;
 import Classes.Usuario;
+import DAO.UsuarioDAO;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 import javax.swing.JOptionPane;
-
-
 
 public class Login extends javax.swing.JFrame {
 
-    
     public Login() {
         initComponents();
         AtalhoAcessibilidade();
     }
 
-    public void AtalhoAcessibilidade(){
+    public void AtalhoAcessibilidade() {
         bt_enviar.setMnemonic(KeyEvent.VK_E);
         bt_limpar.setMnemonic(KeyEvent.VK_L);
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -130,52 +122,49 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
-       Conexao_bd conexao = new Conexao_bd();
-       String login = recebe_usuario.getText();
-       String senha = recebe_senha.getText();
-       
-       Usuario usuario = conexao. validarLogin(login, senha);
-       
-        if (usuario != null) {            
-            
+        UsuarioDAO conexao = new UsuarioDAO();
+        String login = recebe_usuario.getText();
+        String senha = recebe_senha.getText();
+
+        Usuario usuario = conexao.validarLogin(login, senha);
+
+        if (usuario != null) {
+
             int tipo = usuario.getTipoUsuario();
-            Usuario usuariolog = new Usuario(login,senha,tipo);
-            
+            Usuario usuariolog = new Usuario(login, senha, tipo);
+
             Usuario.setUsuarioLogado(usuariolog);
 
-           switch (tipo) {
-               case 1:
-                   {
-                       Menu_inicial menu = new Menu_inicial(usuario);
-                       menu.setVisible(true);
-                       dispose();
-                       JOptionPane.showMessageDialog(null,"Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
-                       break;
-                   }
-               case 2:
-                   {
-                       Menu_inicial menu = new Menu_inicial(usuario);
-                       menu.setVisible(true);
-                       dispose();
-                       JOptionPane.showMessageDialog(null,"Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
-                       break;
-                   }
-               case 3:
-                        Menu_inicial menu = new Menu_inicial(usuario);
-                        menu.setVisible(true);
-                        dispose();
-                        JOptionPane.showMessageDialog(null,"Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
-                        break;
-                        default:
-                   JOptionPane.showMessageDialog(null,"Tipo de usuário não encontrado!");
-                   break;
-           }
+            switch (tipo) {
+                case 1: {
+                    Menu_inicial menu = new Menu_inicial(usuario);
+                    menu.setVisible(true);
+                    dispose();
+                    JOptionPane.showMessageDialog(null, "Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
+                    break;
+                }
+                case 2: {
+                    Menu_inicial menu = new Menu_inicial(usuario);
+                    menu.setVisible(true);
+                    dispose();
+                    JOptionPane.showMessageDialog(null, "Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
+                    break;
+                }
+                case 3:
+                    Menu_inicial menu = new Menu_inicial(usuario);
+                    menu.setVisible(true);
+                    dispose();
+                    JOptionPane.showMessageDialog(null, "Login bem-sucedido! Seja bem vindo(a) " + usuario.getLogin());
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Tipo de usuário não encontrado!");
+                    break;
+            }
         } else {
-           JOptionPane.showMessageDialog(null,"Usuário ou senha inválidos.");
+            JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos.");
         }
-           
-        
-        
+
+
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
@@ -238,6 +227,5 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField recebe_senha;
     private javax.swing.JTextField recebe_usuario;
     // End of variables declaration//GEN-END:variables
-
 
 }

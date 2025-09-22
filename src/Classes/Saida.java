@@ -1,8 +1,7 @@
-
 package Classes;
 
-
 public class Saida {
+
     int id;
     String descricao;
     String data;
@@ -15,8 +14,9 @@ public class Saida {
         this.valor = valor;
         this.usuario = usuario;
     }
-    public Saida(){
-        
+
+    public Saida() {
+
     }
 
     public int getId() {
@@ -58,7 +58,5 @@ public class Saida {
     public void setUsuario(int usuario) {
         this.usuario = usuario;
     }
-    
-    
-    
+
 }

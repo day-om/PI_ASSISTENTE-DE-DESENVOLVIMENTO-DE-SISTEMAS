@@ -1,32 +1,24 @@
-
-
 package Telas;
 
-
 import Classes.Usuario;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author dayan
  */
 public class Cadastro_professores extends javax.swing.JFrame {
-        
-     
-     private DefaultTableModel tabela;
-     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-   
-    
+
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public Cadastro_professores() {
         initComponents();
-        
+
     }
 
     Cadastro_professores(Usuario usuarioLogado) {
         initComponents();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -127,22 +119,22 @@ public class Cadastro_professores extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
-       Menu_inicial menu = new Menu_inicial(usuarioLogado);
-       menu.setVisible(true);
-       dispose();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
+        menu.setVisible(true);
+        dispose();
     }//GEN-LAST:event_bt_menuActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
         menu_cadastrar menu = new menu_cadastrar(usuarioLogado);
         menu.setVisible(true);
         dispose();
-        
+
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_novoCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_novoCadastroActionPerformed
-       novo_professor novo = new novo_professor(usuarioLogado);
-       novo.setVisible(true);
-       dispose();
+        novo_professor novo = new novo_professor(usuarioLogado);
+        novo.setVisible(true);
+        dispose();
     }//GEN-LAST:event_bt_novoCadastroActionPerformed
 
     private void bt_conultarCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_conultarCadastroActionPerformed
@@ -151,7 +143,6 @@ public class Cadastro_professores extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_bt_conultarCadastroActionPerformed
 
-  
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

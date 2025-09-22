@@ -1,10 +1,10 @@
-
 package Telas;
 
 import Classes.Aluno;
-import Classes.Conexao_bd;
 import Classes.Diario;
 import Classes.Usuario;
+import DAO.AlunoDAO;
+import DAO.DiarioDAO;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 public class Diario_aulas extends javax.swing.JFrame {
 
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+
     public Diario_aulas(Usuario usuario) {
         initComponents();
     }
@@ -23,12 +23,6 @@ public class Diario_aulas extends javax.swing.JFrame {
         initComponents();
     }
 
- 
-    
-
-     
-
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -204,25 +198,18 @@ public class Diario_aulas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pesquisarActionPerformed
-        String nome;
-        nome = recebe_nome.getText();
+        String nome = recebe_nome.getText();
 
-        Conexao_bd dao = new Conexao_bd();
-        boolean status = dao.conectar();
-
-        if(status == true){
-            Aluno aluno = dao.consultarAluno(nome);
-            System.out.println(dao.consultarAluno(nome));
-            if(aluno == null){
-                JOptionPane.showMessageDialog(null,"Aluno não localizado!");
-            }else{
-                recebe_nome.setText(aluno.getNome());
-                recebe_id.setText(Integer.toString(aluno.getId()));
-            }
-            dao.desconectar();
-        }else{
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        AlunoDAO alunoDAO = new AlunoDAO();
+        // Consulta pelo nome
+        Aluno aluno = alunoDAO.consultarAluno(nome);
+        if (aluno == null) {
+            JOptionPane.showMessageDialog(null, "Aluno não localizado!");
+        } else {
+            recebe_nome.setText(aluno.getNome());
+            recebe_id.setText(String.valueOf(aluno.getId()));
         }
+
     }//GEN-LAST:event_bt_pesquisarActionPerformed
 
     private void recebe_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recebe_idActionPerformed
@@ -234,42 +221,91 @@ public class Diario_aulas extends javax.swing.JFrame {
     }//GEN-LAST:event_recebe_dataActionPerformed
 
     private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
-        int aluno = Integer.parseInt(recebe_id.getText());;
-        String data = recebe_data.getText();
-        String presenca = (String) recebe_presenca.getSelectedItem();
-        String descricao = recebe_descricao.getText();
-        String desempenho = (String) recebe_desempenho.getSelectedItem();
-        
-        Diario diario = new Diario(aluno,data,presenca,descricao,desempenho);
+        try {
+            // --- CAPTURA DOS DADOS ---
+            String alunoStr = recebe_id.getText().trim();
+            String data = recebe_data.getText().trim();
+            String presenca = (String) recebe_presenca.getSelectedItem();
+            String descricao = recebe_descricao.getText().trim();
+            String desempenho = (String) recebe_desempenho.getSelectedItem();
 
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
+            // --- VALIDAÇÕES ---
+            if (alunoStr.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "O campo ID do aluno não pode estar vazio!");
+                recebe_id.requestFocus();
+                return;
+            }
 
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.salvarRegistro(diario);
+            int aluno;
+            try {
+                aluno = Integer.parseInt(alunoStr);
+                if (aluno <= 0) {
+                    JOptionPane.showMessageDialog(null, "O ID do aluno deve ser um número positivo!");
+                    recebe_id.requestFocus();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "ID do aluno inválido. Insira apenas números!");
+                recebe_id.requestFocus();
+                return;
+            }
 
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
+            if (data.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "O campo DATA não pode estar vazio!");
+                recebe_data.requestFocus();
+                return;
+            }
 
-                recebe_nome.setText("");
+            // Validação simples de data (formato dd/MM/yyyy)
+            if (!data.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                JOptionPane.showMessageDialog(null, "A DATA deve estar no formato dd/MM/yyyy!");
+                recebe_data.requestFocus();
+                return;
+            }
+
+            if (presenca == null || presenca.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Selecione uma opção para PRESENÇA!");
+                recebe_presenca.requestFocus();
+                return;
+            }
+
+            if (descricao.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "O campo DESCRIÇÃO não pode estar vazio!");
+                recebe_descricao.requestFocus();
+                return;
+            }
+
+            if (desempenho == null || desempenho.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Selecione uma opção para DESEMPENHO!");
+                recebe_desempenho.requestFocus();
+                return;
+            }
+
+            // --- CRIAÇÃO DO OBJETO ---
+            Diario diario = new Diario(aluno, data, presenca, descricao, desempenho);
+
+            // --- SALVANDO NO BANCO ---
+            DiarioDAO dao = new DiarioDAO();
+            int resposta = dao.salvarRegistro(diario);
+
+            if (resposta == 1) {
+                JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso!");
                 recebe_id.setText("");
                 recebe_data.setText("");
                 recebe_descricao.setText("");
-                recebe_nome.requestFocus();
+                recebe_presenca.setSelectedIndex(0);
+                recebe_desempenho.setSelectedIndex(0);
+                recebe_id.requestFocus();
 
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
+            } else if (resposta == 1062) {
+                JOptionPane.showMessageDialog(null, "Já existe um registro com esse ID!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados!");
             }
-            dao.desconectar();
-        }
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado: " + e.getMessage());
+        }
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_registrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_registrosActionPerformed

@@ -1,46 +1,39 @@
-
-
 package Telas;
 
-
 import Classes.Usuario;
-import javax.swing.table.DefaultTableModel;
-
 
 public class menu_aula extends javax.swing.JFrame {
 
-    
-     private DefaultTableModel tabela;
-     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-     
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public menu_aula() {
         initComponents();
-        
+
     }
 
     menu_aula(Usuario usuarioLogado) {
         initComponents();
         int tipo;
         tipo = usuarioLogado.getTipoUsuario();
-        switch(tipo){
+        switch (tipo) {
             case 1:
-            bt_cadastro.setEnabled(true);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(true); 
-            break;
+                bt_cadastro.setEnabled(true);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(true);
+                break;
             case 2:
-            bt_cadastro.setEnabled(true);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(false); 
-            break;
+                bt_cadastro.setEnabled(true);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(false);
+                break;
             case 3:
-            bt_cadastro.setEnabled(false);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(false); 
-            bt_nova.setEnabled(false);
-            bt_consulta.setEnabled(false);
-            bt_diario.setEnabled(true);
-            break;
+                bt_cadastro.setEnabled(false);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(false);
+                bt_nova.setEnabled(false);
+                bt_consulta.setEnabled(false);
+                bt_diario.setEnabled(true);
+                break;
         }
     }
 
@@ -211,9 +204,9 @@ public class menu_aula extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_aulasActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
-      Menu_inicial menu = new Menu_inicial(usuarioLogado);
-      menu.setVisible(true);
-      dispose();
+        Menu_inicial menu = new Menu_inicial(usuarioLogado);
+        menu.setVisible(true);
+        dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed

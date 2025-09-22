@@ -1,39 +1,36 @@
-
 package Telas;
 
 import Classes.Usuario;
 
-
 public class menu_cadastrar extends javax.swing.JFrame {
+
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
-    public menu_cadastrar(){
+
+    public menu_cadastrar() {
         initComponents();
     }
 
-    
     public menu_cadastrar(Usuario usuario) {
         initComponents();
         int tipo = usuario.getTipoUsuario();
-         if(tipo == 1) {
+        if (tipo == 1) {
             bt_cadastro.setEnabled(true);
             bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(true); 
-             
+            bt_financeiro.setEnabled(true);
+
         } else if (tipo == 2) {
             bt_cadastro.setEnabled(true);
             bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(false); 
-            
+            bt_financeiro.setEnabled(false);
+
         } else if (tipo == 3) {
             bt_cadastro.setEnabled(false);
             bt_aulas.setEnabled(true);
             bt_financeiro.setEnabled(false);
-            
+
         }
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -244,7 +241,6 @@ public class menu_cadastrar extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_bt_admActionPerformed
 
-   
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

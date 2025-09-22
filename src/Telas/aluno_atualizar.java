@@ -1,24 +1,22 @@
-
 package Telas;
 
 import Classes.Aluno;
-import Classes.Conexao_bd;
 import Classes.Usuario;
-import static java.lang.Integer.parseInt;
+import DAO.AlunoDAO;
 import javax.swing.JOptionPane;
-
 
 public class aluno_atualizar extends javax.swing.JFrame {
 
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public aluno_atualizar() {
         initComponents();
     }
-    public aluno_atualizar(Usuario usuarioLogado){
+
+    public aluno_atualizar(Usuario usuarioLogado) {
         initComponents();
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -221,7 +219,7 @@ public class aluno_atualizar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void recebe_pacoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recebe_pacoteActionPerformed
-     
+
     }//GEN-LAST:event_recebe_pacoteActionPerformed
 
     private void bt_atualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_atualizarActionPerformed
@@ -236,94 +234,75 @@ public class aluno_atualizar extends javax.swing.JFrame {
         int nivel = 0;
         int idAluno = Integer.parseInt(recebe_id.getText());
 
-        if (nome.isEmpty() || idade.isEmpty() || cpf.isEmpty()){
+        if (nome.isEmpty() || idade.isEmpty() || cpf.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
             return;
         }
-        if(!nome.matches("[a-zA-Z]+")){
+        if (!nome.matches("[a-zA-Z]+")) {
             JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!");
             return;
         }
-        if(!idade.matches("[0-9]+")){
+        if (!idade.matches("[0-9]+")) {
             JOptionPane.showMessageDialog(null, "No campo (IDADE) insira apenas números!");
             return;
         }
-        if(!cpf.matches("[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}")){
+        if (!cpf.matches("[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}")) {
             JOptionPane.showMessageDialog(null, "Formato de CPF inválido. Use os pontos e traço corretamente.");
             return;
         }
 
         switch (pct) {
             case "3 aulas semanais":
-            pacote = 1;
-            break;
+                pacote = 1;
+                break;
             case "5 aulas semanais":
-            pacote = 2;
-            break;
+                pacote = 2;
+                break;
             default:
-            JOptionPane.showMessageDialog(null, "Pacote inválido");
-            return;
+                JOptionPane.showMessageDialog(null, "Pacote inválido");
+                return;
         }
 
         switch (niv) {
             case "Iniciante":
-            nivel = 1;
-            break;
+                nivel = 1;
+                break;
             case "Intermediário":
-            nivel = 2;
-            break;
+                nivel = 2;
+                break;
             case "Avançado":
-            nivel = 3;
-            break;
+                nivel = 3;
+                break;
             default:
-            JOptionPane.showMessageDialog(null, "Nível inválido");
-            return;
+                JOptionPane.showMessageDialog(null, "Nível inválido");
+                return;
         }
 
         switch (instru) {
             case "Teclado":
-            instrumento = 1;
-            break;
+                instrumento = 1;
+                break;
             case "Violão":
-            instrumento = 2;
-            break;
+                instrumento = 2;
+                break;
             case "Flauta":
-            instrumento = 3;
-            break;
+                instrumento = 3;
+                break;
             default:
-            JOptionPane.showMessageDialog(null, "Instrumento inválido");
-            return;
+                JOptionPane.showMessageDialog(null, "Instrumento inválido");
+                return;
         }
 
-      Conexao_bd aluno = new Conexao_bd();         
-      boolean status;
-      status = aluno.conectar();
-      int resposta;
-      
-       if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = aluno.atualizarAluno(idAluno, nome, idade, cpf, pacote, nivel, instrumento);            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados atualizados com sucesso");
-                
-                recebe_nome.setText("");
-                recebe_id.setText("");
-                novo_nome.setText("");
-                recebe_idade.setText("");
-                recebe_cpf.setText("");
-                novo_nome.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro na atualização");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            
-            aluno.desconectar();
-        }
-        
-    
+        AlunoDAO adm = new AlunoDAO();
+        adm.atualizarAluno(idAluno, nome, idade, cpf, pacote, nivel, instrumento);
+        JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso!");
+
+        recebe_nome.setText("");
+        recebe_id.setText("");
+        recebe_idade.setText("");
+        recebe_cpf.setText("");
+        novo_nome.requestFocus();
+
     }//GEN-LAST:event_bt_atualizarActionPerformed
 
     private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
@@ -349,26 +328,18 @@ public class aluno_atualizar extends javax.swing.JFrame {
         String nome;
         nome = recebe_nome.getText();
 
-        Conexao_bd dao = new Conexao_bd();
-        boolean status = dao.conectar();
+        AlunoDAO dao = new AlunoDAO();
+        Aluno aluno = dao.consultarAluno(nome);
 
-        if(status == true){
-            Classes.Aluno aluno = dao.consultarAluno(nome);
-            System.out.println(dao.consultarAluno(nome));
-            if(aluno == null){
-                JOptionPane.showMessageDialog(null,"Aluno não localizado!");
-            }else{
-                recebe_nome.setText(aluno.getNome());
-                recebe_id.setText(Integer.toString(aluno.getId()));
-                JOptionPane.showMessageDialog(null, "Aluno encontrado com sucesso! Digite os novos dados!");
-            }
-            dao.desconectar();
-        }else{
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        if (aluno == null) {
+            JOptionPane.showMessageDialog(null, "Aluno não localizado!");
+        } else {
+            recebe_nome.setText(aluno.getNome());
+            recebe_id.setText(Integer.toString(aluno.getId()));
+            JOptionPane.showMessageDialog(null, "Aluno encontrado com sucesso! Digite os novos dados!");
         }
     }//GEN-LAST:event_bt_pesquisarActionPerformed
 
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

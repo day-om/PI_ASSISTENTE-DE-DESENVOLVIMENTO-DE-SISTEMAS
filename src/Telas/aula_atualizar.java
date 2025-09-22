@@ -1,25 +1,23 @@
-
 package Telas;
 
-import Classes.Aluno;
 import Classes.Aula;
-import Classes.Conexao_bd;
 import Classes.Usuario;
+import DAO.AulaDAO;
 import static java.lang.Integer.parseInt;
 import javax.swing.JOptionPane;
 
-
 public class aula_atualizar extends javax.swing.JFrame {
 
-     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-     
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public aula_atualizar() {
         initComponents();
     }
 
-    public aula_atualizar(Usuario usuarioLogado){
+    public aula_atualizar(Usuario usuarioLogado) {
         initComponents();
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -171,101 +169,76 @@ public class aula_atualizar extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_bt_sairActionPerformed
 
-     @SuppressWarnings("empty-statement")
+    @SuppressWarnings("empty-statement")
     private void bt_atualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_atualizarActionPerformed
-        int idAula = Integer.parseInt(recebe_id_aula.getText());;
-        String data = recebe_data.getText();
-        String h = (String) recebe_horario.getSelectedItem();
-        int horario = 0;
+         int idAula = Integer.parseInt(recebe_id_aula.getText());;
+         String data = recebe_data.getText();
+         String h = (String) recebe_horario.getSelectedItem();
+         int horario = 0;
 
-        switch (h) {
-            case "MANHÃ - 1°":
-            horario = 1;
-            break;
-            case "MANHÃ - 2°":
-            horario = 2;
-            break;
-            case "MANHÃ - 3°":
-            horario = 3;
-            break;
-            case "MANHÃ - 4°":
-            horario = 4;
-            break;
-            case "MANHÃ - 5°":
-            horario = 5;
-            break;
-            case "TARDE - 1°":
-            horario = 6;
-            break;
-            case "TARDE - 2°":
-            horario = 7;
-            break;
-            case "TARDE - 3°":
-            horario = 8;
-            break;
-            case "TARDE - 4°":
-            horario = 9;
-            break;
-            case "TARDE - 5°":
-            horario = 10;
-            break;
-            default:
-            JOptionPane.showMessageDialog(null, "Horário inválido");
-            return;
-        }       
+         switch (h) {
+             case "MANHÃ - 1°":
+                 horario = 1;
+                 break;
+             case "MANHÃ - 2°":
+                 horario = 2;
+                 break;
+             case "MANHÃ - 3°":
+                 horario = 3;
+                 break;
+             case "MANHÃ - 4°":
+                 horario = 4;
+                 break;
+             case "MANHÃ - 5°":
+                 horario = 5;
+                 break;
+             case "TARDE - 1°":
+                 horario = 6;
+                 break;
+             case "TARDE - 2°":
+                 horario = 7;
+                 break;
+             case "TARDE - 3°":
+                 horario = 8;
+                 break;
+             case "TARDE - 4°":
+                 horario = 9;
+                 break;
+             case "TARDE - 5°":
+                 horario = 10;
+                 break;
+             default:
+                 JOptionPane.showMessageDialog(null, "Horário inválido");
+                 return;
+         }
+         AulaDAO aula = new AulaDAO();
+         aula.atualizarAula(data, horario, idAula);
+         JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso");
 
-            Conexao_bd aula = new Conexao_bd();         
-            boolean status;
-            status = aula.conectar();
-            int resposta;
-      
-       if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = aula.atualizarAula(data,horario,idAula);            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados atualizados com sucesso");
-                
-                recebe_id_aula.setText("");
-                recebe_data.setText("");
-                recebe_id_aula.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro na atualização");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            
-            aula.desconectar();
-        }
-    
+         recebe_id_aula.setText("");
+         recebe_data.setText("");
+         recebe_id_aula.requestFocus();
+
     }//GEN-LAST:event_bt_atualizarActionPerformed
 
     private void bt_pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pesquisarActionPerformed
         int id;
         id = parseInt(recebe_id_aula.getText());
 
-        Conexao_bd dao = new Conexao_bd();
-        boolean status = dao.conectar();
+        AulaDAO dao = new AulaDAO();
+        Aula aula = dao.consultarAula(id);
 
-        if(status == true){
-            Aula aula = dao.consultarAula(id);
-            System.out.println(dao.consultarAula(id));
-            if(aula == null){
-                JOptionPane.showMessageDialog(null,"Aula não localizada!");
-            }else{
-                JOptionPane.showMessageDialog(null, "Aula encontrada com sucesso! Pode atualizar dados!");
-            }
-            dao.desconectar();
-        }else{
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        if (aula == null) {
+            JOptionPane.showMessageDialog(null, "Aula não localizada!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Aula encontrada com sucesso! Pode atualizar dados!");
         }
     }//GEN-LAST:event_bt_pesquisarActionPerformed
 
     private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
-                recebe_id_aula.setText("");
-                recebe_data.setText("");
-                recebe_id_aula.requestFocus();
+        recebe_id_aula.setText("");
+        recebe_data.setText("");
+        recebe_id_aula.requestFocus();
     }//GEN-LAST:event_bt_limparActionPerformed
 
     public static void main(String args[]) {

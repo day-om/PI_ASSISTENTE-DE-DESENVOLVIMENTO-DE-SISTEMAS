@@ -1,8 +1,7 @@
-
 package Telas;
 
-import Classes.Conexao_bd;
 import Classes.Usuario;
+import DAO.UsuarioDAO;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,10 +11,12 @@ import javax.swing.JOptionPane;
 public class Cadastro_usuario extends javax.swing.JFrame {
 
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public Cadastro_usuario() {
         initComponents();
     }
-    public Cadastro_usuario(Usuario usuarioLogado){
+
+    public Cadastro_usuario(Usuario usuarioLogado) {
         initComponents();
     }
 
@@ -154,8 +155,8 @@ public class Cadastro_usuario extends javax.swing.JFrame {
         String senha = recebe_senha.getText();
         String tipo = (String) recebe_tipo.getSelectedItem();
         int tipo_usuario = 0;
-        
-        switch(tipo){
+
+        switch (tipo) {
             case "Gestor":
                 tipo_usuario = 1;
                 break;
@@ -166,36 +167,23 @@ public class Cadastro_usuario extends javax.swing.JFrame {
                 tipo_usuario = 3;
                 break;
             default:
-                JOptionPane.showMessageDialog(null,"Tipo de usuário inválido!");
+                JOptionPane.showMessageDialog(null, "Tipo de usuário inválido!");
         }
+        Usuario usuario = new Usuario(login, senha, tipo_usuario);
+        UsuarioDAO dao = new UsuarioDAO();
 
-        Usuario usuario = new Usuario(login,senha,tipo_usuario);
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
-        
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.salvarUsuario(usuario);
-            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-               
-                recebe_usuario.setText("");
-                recebe_senha.setText("");
-                recebe_usuario.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
+        int resposta = dao.salvarUsuario(usuario);
+
+        if (resposta == 1) {
+            JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso");
+            recebe_usuario.setText("");
+            recebe_senha.setText("");
+            recebe_usuario.requestFocus();
+        } else if (resposta == 1062) {
+            JOptionPane.showMessageDialog(null, "Erro: usuário já cadastrado");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
         }
-        
 
     }//GEN-LAST:event_bt_cadastrarActionPerformed
 

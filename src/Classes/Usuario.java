@@ -1,32 +1,32 @@
-
 package Classes;
 
-
 public class Usuario {
-     private static Usuario usuarioLogado;
-    
+
+    private static Usuario usuarioLogado;
+
     int idUsuario;
     String login;
     String senha;
     int tipoUsuario;
-    
-    public Usuario(){
-        
+
+    public Usuario() {
+
     }
-    public Usuario(String login, String senha, int tipoUsuario){
+
+    public Usuario(String login, String senha, int tipoUsuario) {
         this.login = login;
         this.senha = senha;
         this.tipoUsuario = tipoUsuario;
     }
 
-    public Usuario(int idUsuario,String login, String senha,int tipoUsuario) {
+    public Usuario(int idUsuario, String login, String senha, int tipoUsuario) {
         this.idUsuario = idUsuario;
         this.login = login;
         this.senha = senha;
         this.tipoUsuario = tipoUsuario;
     }
-    
-     public static Usuario getUsuarioLogado() {
+
+    public static Usuario getUsuarioLogado() {
         return usuarioLogado;
     }
 
@@ -65,5 +65,5 @@ public class Usuario {
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
-    
+
 }

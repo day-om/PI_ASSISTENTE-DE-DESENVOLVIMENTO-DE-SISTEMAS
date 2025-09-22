@@ -1,30 +1,28 @@
-
 package Classes;
 
-
 public class Professor {
+
     int idProfessor;
     String nome;
     int instrumento;
     String instru;
- 
-    
-    
-    public Professor(){
-        
+
+    public Professor() {
+
     }
+
     public Professor(String nome, int instrumento) {
         this.idProfessor = idProfessor;
         this.nome = nome;
         this.instrumento = instrumento;
-        
+
     }
 
-    public Professor(int idProfessor,String nome, int instrumento) {
+    public Professor(int idProfessor, String nome, int instrumento) {
         this.idProfessor = idProfessor;
         this.nome = nome;
         this.instrumento = instrumento;
-        
+
     }
 
     public String getInstru() {
@@ -34,9 +32,6 @@ public class Professor {
     public void setInstru(String instru) {
         this.instru = instru;
     }
-    
-
-  
 
     public String getNome() {
         return nome;
@@ -62,15 +57,4 @@ public class Professor {
         this.idProfessor = idProfessor;
     }
 
-    
-    
-
-   
-
-   
-
-    
-    
-    
-    
 }

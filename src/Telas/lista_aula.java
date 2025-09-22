@@ -1,22 +1,19 @@
-
 package Telas;
 
-
 import Classes.Aula;
-import Classes.Conexao_bd;
 import Classes.Usuario;
+import DAO.AlunoDAO;
+import DAO.AulaDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-
 public class lista_aula extends javax.swing.JFrame {
 
     public DefaultTableModel tabela;
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-   
-    
+
     public lista_aula() {
         initComponents();
         preencherTabela();
@@ -24,10 +21,11 @@ public class lista_aula extends javax.swing.JFrame {
 
     lista_aula(Usuario usuarioLogado) {
         initComponents();
-        preencherTabela(); 
+        preencherTabela();
     }
+
     private void preencherTabela() {
-        Conexao_bd dao = new Conexao_bd();
+        AulaDAO dao = new AulaDAO();
 
         String nome = recebe_nome.getText();
         List<Aula> listaAula = dao.getAula(nome);
@@ -37,7 +35,7 @@ public class lista_aula extends javax.swing.JFrame {
 
         mostra_consulta.setRowSorter(new TableRowSorter(tabelaAula));
         if (listaAula != null) {
-            for (Aula c : listaAula)    {
+            for (Aula c : listaAula) {
                 Object[] obj = new Object[]{
                     c.getId(),
                     c.getAluno(),
@@ -48,44 +46,45 @@ public class lista_aula extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Lista de aulas vazia!");
         }
-     }
-private boolean excluirDoBanco(int id) {
-    Conexao_bd dao = new Conexao_bd();
-
-    boolean excluido = dao.excluirAluno(id); 
-
-    if (excluido) {
-        return true;
-    }else{
-        return false;
     }
-}
+
+    private boolean excluirDoBanco(int id) {
+        AlunoDAO dao = new AlunoDAO();
+
+        boolean excluido = dao.excluirAluno(id);
+
+        if (excluido) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void excluirLinhaSelecionada() {
-    int linhaSelecionada = mostra_consulta.getSelectedRow();
-    if (linhaSelecionada != -1) {
-        
-        int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
-        
-        int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?", 
-                                                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
-        if (resposta == JOptionPane.YES_OPTION) {
-            
+        int linhaSelecionada = mostra_consulta.getSelectedRow();
+        if (linhaSelecionada != -1) {
+
+            int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
+
+            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?",
+                    "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION) {
+
                 boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
 
-            if (excluidoComSucesso) {
-                DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
-                modeloTabela.removeRow(linhaSelecionada);
-                 JOptionPane.showMessageDialog(null, "Aula excluída com sucesso!");                
-            } else {
-                JOptionPane.showMessageDialog(null, "Não é possível excluir esse aula, pois existem registros associados a ela.");
+                if (excluidoComSucesso) {
+                    DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
+                    modeloTabela.removeRow(linhaSelecionada);
+                    JOptionPane.showMessageDialog(null, "Aula excluída com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não é possível excluir esse aula, pois existem registros associados a ela.");
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
     }
-}
-     
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -232,7 +231,6 @@ private boolean excluirDoBanco(int id) {
         dispose();
     }//GEN-LAST:event_bt_atualizarActionPerformed
 
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

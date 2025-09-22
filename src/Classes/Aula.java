@@ -1,20 +1,20 @@
-
 package Classes;
 
-
 public class Aula {
+
     int id;
     int aluno;
     int horario;
     String data;
 
-    public Aula(int aluno,String data,int horario) {
+    public Aula(int aluno, String data, int horario) {
         this.aluno = aluno;
         this.data = data;
         this.horario = horario;
     }
-    public Aula(){
-        
+
+    public Aula() {
+
     }
 
     public String getData() {
@@ -24,7 +24,6 @@ public class Aula {
     public void setData(String data) {
         this.data = data;
     }
-    
 
     public int getId() {
         return id;
@@ -49,6 +48,5 @@ public class Aula {
     public void setHorario(int horario) {
         this.horario = horario;
     }
-    
-    
+
 }

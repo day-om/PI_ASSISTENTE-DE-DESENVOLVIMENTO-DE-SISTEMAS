@@ -1,20 +1,19 @@
-
 package Telas;
 
-import Classes.Conexao_bd;
 import Classes.Saida;
 import Classes.Usuario;
+import DAO.AlunoDAO;
+import DAO.SaidaDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-
 public class lista_saida extends javax.swing.JFrame {
-    
+
     public DefaultTableModel tabela;
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+
     public lista_saida() {
         initComponents();
         preencherTabela();
@@ -22,10 +21,11 @@ public class lista_saida extends javax.swing.JFrame {
 
     lista_saida(Usuario usuarioLogado) {
         initComponents();
-        preencherTabela(); 
+        preencherTabela();
     }
+
     private void preencherTabela() {
-        Conexao_bd dao = new Conexao_bd();
+        SaidaDAO dao = new SaidaDAO();
 
         String nome = recebe_nome.getText();
         List<Saida> listaSaidas = dao.getSaida(nome);
@@ -35,58 +35,58 @@ public class lista_saida extends javax.swing.JFrame {
 
         mostra_saidas.setRowSorter(new TableRowSorter(tabelaSaidas));
         if (listaSaidas != null) {
-            for (Saida c : listaSaidas)    {
+            for (Saida c : listaSaidas) {
                 Object[] obj = new Object[]{
                     c.getId(),
                     c.getDescricao(),
                     c.getData(),
                     c.getValor(),
-                    c.getUsuario()                
+                    c.getUsuario()
                 };
                 tabelaSaidas.addRow(obj);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Lista de saídas vazia!");
         }
-     }
-
-   private boolean excluirDoBanco(int id) {
-    Conexao_bd dao = new Conexao_bd();
-    boolean excluido = dao.excluirAluno(id); 
-
-    if (excluido) {
-        return true;
-    } else {
-        return false;
     }
-    
-}
-   private void excluirLinhaSelecionada() {
-    int linhaSelecionada = mostra_saidas.getSelectedRow();
-    if (linhaSelecionada != -1) {
-        
-        int idSelecionado = (int) mostra_saidas.getValueAt(linhaSelecionada, 0);
-        
-        int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?", 
-                                                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
-        if (resposta == JOptionPane.YES_OPTION) {
-            
-            boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
 
-            if (excluidoComSucesso) {
-                DefaultTableModel modeloTabela = (DefaultTableModel) mostra_saidas.getModel();
-                modeloTabela.removeRow(linhaSelecionada);
-                JOptionPane.showMessageDialog(null, "Saída excluído com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Não é possível excluir essa saída, pois existem registros associados a ela.");
-            }
+    private boolean excluirDoBanco(int id) {
+        AlunoDAO dao = new AlunoDAO();
+        boolean excluido = dao.excluirAluno(id);
+
+        if (excluido) {
+            return true;
+        } else {
+            return false;
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
-    }
-}
 
-   
+    }
+
+    private void excluirLinhaSelecionada() {
+        int linhaSelecionada = mostra_saidas.getSelectedRow();
+        if (linhaSelecionada != -1) {
+
+            int idSelecionado = (int) mostra_saidas.getValueAt(linhaSelecionada, 0);
+
+            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?",
+                    "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION) {
+
+                boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
+
+                if (excluidoComSucesso) {
+                    DefaultTableModel modeloTabela = (DefaultTableModel) mostra_saidas.getModel();
+                    modeloTabela.removeRow(linhaSelecionada);
+                    JOptionPane.showMessageDialog(null, "Saída excluído com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não é possível excluir essa saída, pois existem registros associados a ela.");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

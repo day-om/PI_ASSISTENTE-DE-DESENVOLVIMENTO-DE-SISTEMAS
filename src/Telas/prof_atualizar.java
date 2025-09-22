@@ -1,27 +1,22 @@
-
 package Telas;
 
-import Classes.Aula;
-import Classes.Conexao_bd;
 import Classes.Professor;
 import Classes.Usuario;
-import static java.lang.Integer.parseInt;
+import DAO.ProfessorDAO;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author dayan
- */
 public class prof_atualizar extends javax.swing.JFrame {
 
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public prof_atualizar() {
         initComponents();
     }
 
-    public prof_atualizar(Usuario usuarioLogado){
-         initComponents();
+    public prof_atualizar(Usuario usuarioLogado) {
+        initComponents();
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -178,58 +173,39 @@ public class prof_atualizar extends javax.swing.JFrame {
         int instrumento = 0;
         int idProf = Integer.parseInt(recebe_id.getText());;
 
-        if (nome.isEmpty() || instru.isEmpty()){
+        if (nome.isEmpty() || instru.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
             return;
         }
-        if(!nome.matches("[a-zA-Z]+")){
+        if (!nome.matches("[a-zA-Z]+")) {
             JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!");
             return;
         }
 
         switch (instru) {
             case "Teclado":
-            instrumento = 1;
-            break;
+                instrumento = 1;
+                break;
             case "Violão":
-            instrumento = 2;
-            break;
+                instrumento = 2;
+                break;
             case "Flauta":
-            instrumento = 3;
-            break;
+                instrumento = 3;
+                break;
 
             default:
-            JOptionPane.showMessageDialog(null, "Instrumento inválido");
-            return;
+                JOptionPane.showMessageDialog(null, "Instrumento inválido");
+                return;
         }
 
-        
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
+        ProfessorDAO dao = new ProfessorDAO();
+        dao.atualizarProf(nome, instrumento, idProf);
 
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.atualizarProf(nome,instrumento,idProf);
+        novo_nome.setText("");
+        recebe_nome.setText("");
+        recebe_id.setText("");
+        recebe_nome.requestFocus();
 
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-
-                novo_nome.setText("");
-                recebe_nome.setText("");
-                recebe_id.setText("");
-                recebe_nome.requestFocus();
-
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
-        }
 
     }//GEN-LAST:event_bt_atualizarActionPerformed
 
@@ -254,25 +230,22 @@ public class prof_atualizar extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pesquisarActionPerformed
-        String nome;
-        nome = recebe_nome.getText();
+        String nome = recebe_nome.getText().trim();
 
-        Conexao_bd dao = new Conexao_bd();
-        boolean status = dao.conectar();
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o nome do professor para pesquisar.");
+            return;
+        }
 
-        if(status == true){
-            Professor prof = dao.consultarProf(nome);
-            System.out.println(dao.consultarProf(nome));
-            if(prof == null){
-                JOptionPane.showMessageDialog(null,"Professor não localizado!");
-            }else{
-                recebe_id.setText(Integer.toString(prof.getIdProfessor()));
-                JOptionPane.showMessageDialog(null, "Professor encontrado com sucesso! Pode atualizar dados!");
-            }
-            dao.desconectar();
-        }else{
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }        
+        ProfessorDAO dao = new ProfessorDAO();
+        Professor prof = dao.consultarProf(nome);
+
+        if (prof == null) {
+            JOptionPane.showMessageDialog(null, "Professor não localizado!");
+        } else {
+            recebe_id.setText(Integer.toString(prof.getIdProfessor()));
+            JOptionPane.showMessageDialog(null, "Professor encontrado com sucesso! Pode atualizar dados!");
+        }
     }//GEN-LAST:event_bt_pesquisarActionPerformed
 
     /**

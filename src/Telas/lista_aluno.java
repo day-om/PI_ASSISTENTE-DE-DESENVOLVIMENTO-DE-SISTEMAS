@@ -1,38 +1,30 @@
-
-
 package Telas;
 
-
 import Classes.Aluno;
-import Classes.Conexao_bd;
 import Classes.Usuario;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import DAO.AlunoDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-
 public class lista_aluno extends javax.swing.JFrame {
 
-    
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
-    
+
     public lista_aluno() {
         initComponents();
         preencherTabela();
-        
+
     }
 
     lista_aluno(Usuario usuarioLogado) {
         initComponents();
-        preencherTabela(); 
+        preencherTabela();
     }
-    
+
     private void preencherTabela() {
-        Conexao_bd dao = new Conexao_bd();
+        AlunoDAO dao = new AlunoDAO();
 
         String nome = recebe_nome.getText();
         List<Aluno> listaAluno = dao.getAluno(nome);
@@ -42,7 +34,7 @@ public class lista_aluno extends javax.swing.JFrame {
 
         mostra_consulta.setRowSorter(new TableRowSorter(tabelaProf));
         if (listaAluno != null) {
-            for (Aluno c : listaAluno)    {
+            for (Aluno c : listaAluno) {
                 Object[] obj = new Object[]{
                     c.getId(),
                     c.getNome(),
@@ -56,56 +48,45 @@ public class lista_aluno extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Lista de alunos vazia!");
         }
-     }
+    }
+
     private boolean excluirDoBanco(int id) {
-    Conexao_bd dao = new Conexao_bd();
-    boolean excluido = dao.excluirAluno(id); 
+        AlunoDAO dao = new AlunoDAO();
+        boolean excluido = dao.excluirAluno(id);
 
-    if (excluido) {
-        return true;
-    } else {
-        return false;
-    }
-    
-}
-   private void excluirLinhaSelecionada() {
-    int linhaSelecionada = mostra_consulta.getSelectedRow();
-    if (linhaSelecionada != -1) {
-        
-        int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
-        
-        int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?", 
-                                                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
-        if (resposta == JOptionPane.YES_OPTION) {
-            
-            boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
-
-            if (excluidoComSucesso) {
-                DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
-                modeloTabela.removeRow(linhaSelecionada);
-                JOptionPane.showMessageDialog(null, "Aluno excluído com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Não é possível excluir esse aluno, pois existem registros associados a ele.");
-            }
+        if (excluido) {
+            return true;
+        } else {
+            return false;
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
-    }
-}
-    private void atualizarUsuarioNaTabela(int id,String nome, String idade, String cpf, int pacote, int nivel, int instrumento) {
-    DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
 
-    modeloTabela.setValueAt(nome,id,1); 
-    modeloTabela.setValueAt(idade, id, 2); 
-    modeloTabela.setValueAt(cpf, id, 3); 
-    modeloTabela.setValueAt(pacote, id, 4); 
-    modeloTabela.setValueAt(nivel, id, 5); 
-    modeloTabela.setValueAt(instrumento, id, 6); 
-}
-   
-     
-                           
-    
+    }
+
+    private void excluirLinhaSelecionada() {
+        int linhaSelecionada = mostra_consulta.getSelectedRow();
+        if (linhaSelecionada != -1) {
+
+            int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
+
+            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?",
+                    "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION) {
+
+                boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
+
+                if (excluidoComSucesso) {
+                    DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
+                    modeloTabela.removeRow(linhaSelecionada);
+                    JOptionPane.showMessageDialog(null, "Aluno excluído com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não é possível excluir esse aluno, pois existem registros associados a ele.");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -251,10 +232,9 @@ public class lista_aluno extends javax.swing.JFrame {
     private void bt_atualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_atualizarActionPerformed
         aluno_atualizar aluno = new aluno_atualizar(usuarioLogado);
         aluno.setVisible(true);
-        dispose();          
+        dispose();
     }//GEN-LAST:event_bt_atualizarActionPerformed
 
- 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

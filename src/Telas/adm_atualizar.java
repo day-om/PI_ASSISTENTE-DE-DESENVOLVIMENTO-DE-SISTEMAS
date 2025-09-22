@@ -1,25 +1,23 @@
-
 package Telas;
 
 import Classes.Adm;
-import Classes.Conexao_bd;
 import Classes.Usuario;
+import DAO.AdmDAO;
 import static java.lang.Integer.parseInt;
 import javax.swing.JOptionPane;
-
 
 public class adm_atualizar extends javax.swing.JFrame {
 
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+
     public adm_atualizar() {
         initComponents();
     }
-    public adm_atualizar(Usuario usuarioLogado){
+
+    public adm_atualizar(Usuario usuarioLogado) {
         initComponents();
     }
 
-  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -175,31 +173,31 @@ public class adm_atualizar extends javax.swing.JFrame {
         String novaFuncao = (String) recebe_funcao.getSelectedItem();
         int funcao;
         int idAdm = parseInt(recebe_id.getText());
-                        
-            if (novoNome != null && !novoNome.trim().isEmpty()) {
-                switch (novaFuncao) {
+
+        if (novoNome != null && !novoNome.trim().isEmpty()) {
+            switch (novaFuncao) {
                 case "Gestor":
-                   funcao = 1;
-                break;
+                    funcao = 1;
+                    break;
                 case "Aux.Administrativo":
                     funcao = 2;
-                break;
+                    break;
 
                 default:
-                    JOptionPane.showMessageDialog(null, "Função inválida"); 
-                return;
-                }
-                Conexao_bd adm = new Conexao_bd();                
-                adm.atualizarAdm(idAdm, novoNome, funcao);
-                JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso!");
-                
-            } else {
-                JOptionPane.showMessageDialog(null, "Nome e função não podem ser vazios.");
+                    JOptionPane.showMessageDialog(null, "Função inválida");
+                    return;
             }
-            novo_nome.setText("");
-            recebe_id.setText("");
-            recebe_nome.setText("");
-            recebe_nome.requestFocus();
+            AdmDAO adm = new AdmDAO();
+            adm.atualizarAdm(idAdm, novoNome, funcao);
+            JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso!");
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Nome e função não podem ser vazios.");
+        }
+        novo_nome.setText("");
+        recebe_id.setText("");
+        recebe_nome.setText("");
+        recebe_nome.requestFocus();
 
     }//GEN-LAST:event_bt_atualizarActionPerformed
 
@@ -208,7 +206,7 @@ public class adm_atualizar extends javax.swing.JFrame {
         recebe_id.setText("");
         recebe_nome.setText("");
         recebe_nome.requestFocus();
-        
+
     }//GEN-LAST:event_bt_limparActionPerformed
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
@@ -224,29 +222,22 @@ public class adm_atualizar extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pesquisarActionPerformed
-         String nome;
-            nome = recebe_nome.getText();
-            
-            Conexao_bd dao = new Conexao_bd();
-            boolean status = dao.conectar();
-            
-            if(status == true){
-                Classes.Adm adm = dao.consultarAdm(nome);
-                System.out.println(dao.consultarAdm(nome));
-                if(adm == null){
-                    JOptionPane.showMessageDialog(null,"Administrador não localizado!");
-                }else{
-                    recebe_nome.setText(adm.getNome());  
-                    recebe_id.setText(Integer.toString(adm.getId()));
-                    JOptionPane.showMessageDialog(null, "Administrador encontrado com sucesso! Digite os novos dados!");
-                }
-                dao.desconectar();
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro de conexão");
-            }
+        String nome;
+        nome = recebe_nome.getText();
+
+        AdmDAO dao = new AdmDAO();
+        Adm adm = dao.consultarAdm(nome);
+
+        if (adm == null) {
+            JOptionPane.showMessageDialog(null, "Administrador não localizado!");
+        } else {
+            recebe_nome.setText(adm.getNome());
+            recebe_id.setText(Integer.toString(adm.getId()));
+            JOptionPane.showMessageDialog(null, "Administrador encontrado com sucesso! Digite os novos dados!");
+        }
+
     }//GEN-LAST:event_bt_pesquisarActionPerformed
 
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

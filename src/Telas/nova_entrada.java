@@ -1,34 +1,26 @@
-
 package Telas;
 
 import Classes.Aluno;
-import Classes.Conexao_bd;
 import Classes.Entrada;
-import Classes.Professor;
 import Classes.Usuario;
-import static java.lang.Double.parseDouble;
-import java.util.Date;
+import DAO.AlunoDAO;
+import DAO.EntradaDAO;
+import DAO.UsuarioDAO;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 
 public class nova_entrada extends javax.swing.JFrame {
 
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+
     public nova_entrada() {
         initComponents();
-      
+
     }
 
     nova_entrada(Usuario usuarioLogado) {
         initComponents();
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -270,64 +262,52 @@ public class nova_entrada extends javax.swing.JFrame {
 
     private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
         int aluno = Integer.parseInt(id_aluno.getText());
-        String data = recebe_data.getText();     
+        String data = recebe_data.getText();
         Double valor = Double.parseDouble(recebe_valor.getText());
         String pag = (String) forma_pagamento.getSelectedItem();
         int usuario = Integer.parseInt(id_usuario.getText());
-        int pagamento = 0;      
-      
-        
+        int pagamento = 0;
+
         switch (pag) {
-        case "ESPÉCIE":
-           pagamento = 1;
-        break;
-        case "CARTÃO DE DÉBITO":
-            pagamento = 2;
-        break;
-        case "CARTÃO DE CRÉDITO":
-            pagamento = 3;
-        break;
-        case "PIX":
-            pagamento = 4;        
-        default:
-            JOptionPane.showMessageDialog(null, "Pagamento inválido"); 
-        return;
+            case "ESPÉCIE":
+                pagamento = 1;
+                break;
+            case "CARTÃO DE DÉBITO":
+                pagamento = 2;
+                break;
+            case "CARTÃO DE CRÉDITO":
+                pagamento = 3;
+                break;
+            case "PIX":
+                pagamento = 4;
+            default:
+                JOptionPane.showMessageDialog(null, "Pagamento inválido");
+                return;
         }
-        
-        Entrada entrada = new Entrada(data,valor,aluno,pagamento,usuario);
-        
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
-        
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.salvarEntrada(entrada);
-            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-               
-                recebe_usuario.setText("");
-                recebe_usuario.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
+
+        Entrada entrada = new Entrada(data, valor, aluno, pagamento, usuario);
+
+        EntradaDAO dao = new EntradaDAO();
+        int resposta = dao.salvarEntrada(entrada);
+
+        if (resposta == 1) {
+            JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso");
+
+        } else if (resposta == 1062) {
+            JOptionPane.showMessageDialog(null, "Erro no cadastrado");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
+
         }
-            
+
         recebe_usuario.setText("");
         recebe_data.setText("");
         recebe_valor.setText("");
         recebe_aluno.setText("");
         id_usuario.setText("");
         id_aluno.setText("");
-        
+        recebe_usuario.requestFocus();
+
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
@@ -343,25 +323,22 @@ public class nova_entrada extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_lista_entradasActionPerformed
 
     private void pesquisar_alunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisar_alunoActionPerformed
-        String nome;
-        nome = recebe_aluno.getText();
-            
-            Conexao_bd dao = new Conexao_bd();
-            boolean status = dao.conectar();
-            
-            if(status == true){
-                Aluno aluno = dao.consultarAluno(nome);
-                System.out.println(dao.consultarAluno(nome));
-                if(aluno == null){
-                    JOptionPane.showMessageDialog(null,"Aluno não localizado!");
-                }else{
-                    recebe_aluno.setText(aluno.getNome());  
-                    id_aluno.setText(Integer.toString(aluno.getId()));
-                }
-                dao.desconectar();
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro de conexão");
-            }
+        String nome = recebe_aluno.getText().trim();
+
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o nome do aluno para pesquisar.");
+            return;
+        }
+
+        AlunoDAO dao = new AlunoDAO();
+        Aluno aluno = dao.consultarAluno(nome);
+
+        if (aluno == null) {
+            JOptionPane.showMessageDialog(null, "Aluno não localizado!");
+        } else {
+            recebe_aluno.setText(aluno.getNome());
+            id_aluno.setText(Integer.toString(aluno.getId()));
+        }
     }//GEN-LAST:event_pesquisar_alunoActionPerformed
 
     private void recebe_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recebe_usuarioActionPerformed
@@ -369,25 +346,22 @@ public class nova_entrada extends javax.swing.JFrame {
     }//GEN-LAST:event_recebe_usuarioActionPerformed
 
     private void pesquisar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisar_usuarioActionPerformed
-            String nome;
-            nome = recebe_usuario.getText();
-            
-            Conexao_bd dao = new Conexao_bd();
-            boolean status = dao.conectar();
-            
-            if(status == true){
-                Classes.Usuario usuario = dao.consultarUsuario(nome);
-                System.out.println(dao.consultarUsuario(nome));
-                if(usuario == null){
-                    JOptionPane.showMessageDialog(null,"Usuario não localizado!");
-                }else{
-                    recebe_usuario.setText(usuario.getLogin());  
-                    id_usuario.setText(Integer.toString(usuario.getIdUsuario()));
-                }
-                dao.desconectar();
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro de conexão");
-            }
+        String nome = recebe_usuario.getText().trim();
+
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o login do usuário para pesquisar.");
+            return;
+        }
+
+        UsuarioDAO dao = new UsuarioDAO();
+        Usuario usuario = dao.consultarUsuario(nome);
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(null, "Usuário não localizado!");
+        } else {
+            recebe_usuario.setText(usuario.getLogin());
+            id_usuario.setText(Integer.toString(usuario.getIdUsuario()));
+        }
     }//GEN-LAST:event_pesquisar_usuarioActionPerformed
 
     /**
@@ -404,16 +378,24 @@ public class nova_entrada extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(nova_entrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(nova_entrada.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(nova_entrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(nova_entrada.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(nova_entrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(nova_entrada.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(nova_entrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(nova_entrada.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -421,7 +403,7 @@ public class nova_entrada extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 new nova_entrada().setVisible(true);
             }
         });

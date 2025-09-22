@@ -1,28 +1,17 @@
-
 package Telas;
 
-
 import Classes.Adm;
-import Classes.Conexao_bd;
 import Classes.Usuario;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import DAO.AdmDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-
 public class lista_adm extends javax.swing.JFrame {
 
-    
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-   
- 
-    
+
     public lista_adm() {
         initComponents();
         preencherTabela();
@@ -30,13 +19,12 @@ public class lista_adm extends javax.swing.JFrame {
 
     lista_adm(Usuario usuarioLogado) {
         initComponents();
-        preencherTabela(); 
+        preencherTabela();
 
-        
-        
     }
+
     private void preencherTabela() {
-        Conexao_bd dao = new Conexao_bd();
+        AdmDAO dao = new AdmDAO();
 
         String nome = recebe_nome.getText();
         List<Adm> listaAdm = dao.getAdm(nome);
@@ -46,7 +34,7 @@ public class lista_adm extends javax.swing.JFrame {
 
         mostra_consulta.setRowSorter(new TableRowSorter(tabelaAdm));
         if (listaAdm != null) {
-            for (Adm c : listaAdm)    {
+            for (Adm c : listaAdm) {
                 Object[] obj = new Object[]{
                     c.getId(),
                     c.getNome(),
@@ -56,42 +44,43 @@ public class lista_adm extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Lista de administradores vazia!");
         }
-     }
+    }
+
     private void excluirDoBanco(int id) {
-    Conexao_bd dao = new Conexao_bd();
+        AdmDAO dao = new AdmDAO();
 
-    boolean excluido = dao.excluirAdm(id); 
+        boolean excluido = dao.excluirAdm(id);
 
-    if (excluido) {
-        JOptionPane.showMessageDialog(null, "Administrador excluído com sucesso!");
-    } else {
-        JOptionPane.showMessageDialog(null, "Erro ao excluir o administrador.");
-    }
-}
-    private void excluirLinhaSelecionada() {
-    
-    int linhaSelecionada = mostra_consulta.getSelectedRow();
-
-    if (linhaSelecionada != -1) {
-       
-       int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
-
-       int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?", 
-                                                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
-
-        if (resposta == JOptionPane.YES_OPTION) {
-            
-            excluirDoBanco(idSelecionado);
-
-            DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
-            modeloTabela.removeRow(linhaSelecionada);
+        if (excluido) {
+            JOptionPane.showMessageDialog(null, "Administrador excluído com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao excluir o administrador.");
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
     }
-}
-  
-  
+
+    private void excluirLinhaSelecionada() {
+
+        int linhaSelecionada = mostra_consulta.getSelectedRow();
+
+        if (linhaSelecionada != -1) {
+
+            int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
+
+            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?",
+                    "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+
+            if (resposta == JOptionPane.YES_OPTION) {
+
+                excluirDoBanco(idSelecionado);
+
+                DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
+                modeloTabela.removeRow(linhaSelecionada);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -231,8 +220,8 @@ public class lista_adm extends javax.swing.JFrame {
     }//GEN-LAST:event_recebe_nomeActionPerformed
 
     private void bt_excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_excluirActionPerformed
-       excluirLinhaSelecionada();
-       
+        excluirLinhaSelecionada();
+
     }//GEN-LAST:event_bt_excluirActionPerformed
 
     private void bt_atualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_atualizarActionPerformed

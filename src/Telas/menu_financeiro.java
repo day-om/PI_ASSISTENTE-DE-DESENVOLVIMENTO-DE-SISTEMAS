@@ -1,46 +1,38 @@
-
 package Telas;
 
-
 import Classes.Usuario;
-import javax.swing.table.DefaultTableModel;
 
- 
 public class menu_financeiro extends javax.swing.JFrame {
 
-    
-    private DefaultTableModel tabela;
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+
     public menu_financeiro() {
         initComponents();
-        
+
     }
 
     menu_financeiro(Usuario usuarioLogado) {
         initComponents();
         int tipo;
         tipo = usuarioLogado.getTipoUsuario();
-        switch(tipo){
+        switch (tipo) {
             case 1:
-            bt_cadastro.setEnabled(true);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(true); 
-            break;
+                bt_cadastro.setEnabled(true);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(true);
+                break;
             case 2:
-            bt_cadastro.setEnabled(true);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(false); 
-            break;
+                bt_cadastro.setEnabled(true);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(false);
+                break;
             case 3:
-            bt_cadastro.setEnabled(false);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(false); 
-            break;
+                bt_cadastro.setEnabled(false);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(false);
+                break;
         }
     }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -217,10 +209,9 @@ public class menu_financeiro extends javax.swing.JFrame {
         menu_cadastrar menu = new menu_cadastrar(usuarioLogado);
         menu.setVisible(true);
         dispose();
-        
+
     }//GEN-LAST:event_bt_cadastroActionPerformed
 
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -1,21 +1,18 @@
-
 package Telas;
 
-import Classes.Conexao_bd;
-import Classes.Entrada;
 import Classes.Saida;
 import Classes.Usuario;
+import DAO.SaidaDAO;
+import DAO.UsuarioDAO;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-
 
 public class nova_saida extends javax.swing.JFrame {
-    
+
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-  
+
     public nova_saida() {
         initComponents();
-        
+
     }
 
     nova_saida(Usuario usuarioLogado) {
@@ -217,62 +214,47 @@ public class nova_saida extends javax.swing.JFrame {
     }//GEN-LAST:event_recebe_usuarioActionPerformed
 
     private void pesquisar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisar_usuarioActionPerformed
-        String nome;
-        nome = recebe_usuario.getText();
 
-        Conexao_bd dao = new Conexao_bd();
-        boolean status = dao.conectar();
+        String nome = recebe_usuario.getText().trim();
 
-        if(status == true){
-            Classes.Usuario usuario = dao.consultarUsuario(nome);
-            System.out.println(dao.consultarUsuario(nome));
-            if(usuario == null){
-                JOptionPane.showMessageDialog(null,"Usuario não localizado!");
-            }else{
-                recebe_usuario.setText(usuario.getLogin());
-                id_usuario.setText(Integer.toString(usuario.getIdUsuario()));
-            }
-            dao.desconectar();
-        }else{
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o login do usuário para pesquisar.");
+            return;
+        }
+
+        UsuarioDAO dao = new UsuarioDAO();
+        Usuario usuario = dao.consultarUsuario(nome);
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(null, "Usuário não localizado!");
+        } else {
+            recebe_usuario.setText(usuario.getLogin());
+            id_usuario.setText(Integer.toString(usuario.getIdUsuario()));
         }
     }//GEN-LAST:event_pesquisar_usuarioActionPerformed
 
     private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
         String descricao = recebe_descricao.getText();
-        String data = recebe_data.getText();     
+        String data = recebe_data.getText();
         Double valor = Double.parseDouble(recebe_valor.getText());
         int usuario = Integer.parseInt(id_usuario.getText());
-           
-      
-                
-        Saida saida = new Saida(descricao,data,valor,usuario);
-        
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
-        
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.salvarSaida(saida);
-            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-               
-                recebe_usuario.setText("");
-                recebe_usuario.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
+
+        Saida saida = new Saida(descricao, data, valor, usuario);
+        SaidaDAO dao = new SaidaDAO();
+        int resposta = dao.salvarSaida(saida);
+
+        if (resposta == 1) {
+            JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso");
+
+            recebe_usuario.setText("");
+            recebe_usuario.requestFocus();
+
+        } else if (resposta == 1062) {
+            JOptionPane.showMessageDialog(null, "Erro no cadastrado");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
         }
-            
+
         recebe_usuario.setText("");
         recebe_descricao.setText("");
         recebe_data.setText("");
@@ -311,7 +293,7 @@ public class nova_saida extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 new nova_saida().setVisible(true);
             }
         });

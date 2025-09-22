@@ -1,28 +1,21 @@
-
 package Telas;
 
 import Classes.Aluno;
-import Classes.Aula;
-import Classes.Conexao_bd;
 import Classes.Diario;
 import Classes.Usuario;
-import static java.lang.Integer.parseInt;
+import DAO.AlunoDAO;
+import DAO.DiarioDAO;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author dayan
- */
 public class registros_atualizar extends javax.swing.JFrame {
 
-    
-     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-     
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public registros_atualizar() {
         initComponents();
     }
-    
-    public registros_atualizar(Usuario usuarioLogado){
+
+    public registros_atualizar(Usuario usuarioLogado) {
         initComponents();
     }
 
@@ -223,33 +216,17 @@ public class registros_atualizar extends javax.swing.JFrame {
         String desempenho = (String) recebe_desempenho.getSelectedItem();
         int diario = Integer.parseInt(id_registros.getText());
 
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
+        DiarioDAO dao = new DiarioDAO();
+        dao.atualizarDiario(data, presenca, descricao, desempenho, aluno, diario);
 
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.atualizarDiario(data,presenca,descricao,desempenho,aluno,diario);
+        id_aluno.setText("");
+        recebe_nome.setText("");
+        id_registros.setText("");
+        recebe_data.setText("");
+        recebe_descricao.setText("");
+        recebe_nome.requestFocus();
 
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-                id_aluno.setText("");
-                recebe_nome.setText("");
-                id_registros.setText("");
-                recebe_data.setText("");
-                recebe_descricao.setText("");
-                recebe_nome.requestFocus();
 
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
-        }
     }//GEN-LAST:event_bt_atualizarActionPerformed
 
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
@@ -259,46 +236,49 @@ public class registros_atualizar extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pesquisarActionPerformed
-        String nome;
-        nome = recebe_nome.getText();
+        String nome = recebe_nome.getText().trim();
 
-        Conexao_bd dao = new Conexao_bd();
-        boolean status = dao.conectar();
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o nome do aluno para pesquisar.");
+            return;
+        }
 
-        if(status == true){
-            Aluno aluno = dao.consultarAluno(nome);
-            System.out.println(dao.consultarAluno(nome));
-            if(aluno == null){
-                JOptionPane.showMessageDialog(null,"Aluno não localizado!");
-            }else{
-                recebe_nome.setText(aluno.getNome());
-                id_aluno.setText(Integer.toString(aluno.getId()));
-                JOptionPane.showMessageDialog(null, "Aluno encontrado com sucesso! Digite os novos dados!");
-            }
-            dao.desconectar();
-        }else{
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        AlunoDAO dao = new AlunoDAO();
+        Aluno aluno = dao.consultarAluno(nome);
+
+        if (aluno == null) {
+            JOptionPane.showMessageDialog(null, "Aluno não localizado!");
+        } else {
+            recebe_nome.setText(aluno.getNome());
+            id_aluno.setText(Integer.toString(aluno.getId()));
+            JOptionPane.showMessageDialog(null, "Aluno encontrado com sucesso! Digite os novos dados!");
         }
     }//GEN-LAST:event_bt_pesquisarActionPerformed
 
     private void pesquisar_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisar_idActionPerformed
+        String textoId = id_registros.getText().trim();
+
+        if (textoId.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o ID do registro para pesquisar.");
+            return;
+        }
+
         int id;
-        id = parseInt(id_registros.getText());
+        try {
+            id = Integer.parseInt(textoId);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "ID inválido. Digite um número válido.");
+            return;
+        }
 
-        Conexao_bd dao = new Conexao_bd();
-        boolean status = dao.conectar();
+        DiarioDAO dao = new DiarioDAO();
+        Diario diario = dao.consultarRegistro(id);
 
-        if(status == true){
-            Diario diario = dao.consultarRegistro(id);
-            System.out.println(dao.consultarRegistro(id));
-            if(diario == null){
-                JOptionPane.showMessageDialog(null,"Registro não localizado!");
-            }else{
-                JOptionPane.showMessageDialog(null, "Registro encontrado com sucesso! Pesquise o aluno!");
-            }
-            dao.desconectar();
-        }else{
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
+        if (diario == null) {
+            JOptionPane.showMessageDialog(null, "Registro não localizado!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Registro encontrado com sucesso! Pesquise o aluno!");
+            // aqui você pode preencher campos da tela com os dados do registro se quiser
         }
     }//GEN-LAST:event_pesquisar_idActionPerformed
 

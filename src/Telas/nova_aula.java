@@ -1,22 +1,19 @@
-
 package Telas;
 
 import Classes.Aluno;
 import Classes.Aula;
-import Classes.Conexao_bd;
 import Classes.Usuario;
+import DAO.AlunoDAO;
+import DAO.AulaDAO;
 import javax.swing.JOptionPane;
 
-
-
 public class nova_aula extends javax.swing.JFrame {
-        
+
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-   
-    
+
     public nova_aula() {
         initComponents();
-        
+
     }
 
     nova_aula(Usuario usuarioLogado) {
@@ -196,96 +193,82 @@ public class nova_aula extends javax.swing.JFrame {
         String data = recebe_data.getText();
         String h = (String) recebe_horario.getSelectedItem();
         int horario = 0;
-            
-        switch (h){
-        case "MANHÃ - 1°":
-           horario = 1;
-        break;
-        case "MANHÃ - 2°":
-            horario = 2;
-        break;
-        case "MANHÃ - 3°":
-            horario = 3;
-        break;
-        case "MANHÃ - 4°":
-            horario = 4;
-        break;
-        case "MANHÃ - 5°":
-            horario = 5;
-        break;
-        case "TARDE - 1°":
-            horario = 6;
-        break;
-        case "TARDE - 2°":
-            horario = 7;
-        break;
-        case "TARDE - 3°":
-            horario = 8;
-        break;
-         case "TARDE - 4°":
-            horario = 9;
-        break;
-         case "TARDE - 5°":
-            horario = 10;
-        break;
-        default:
-            JOptionPane.showMessageDialog(null, "Horário inválido"); 
-        return;
+
+        switch (h) {
+            case "MANHÃ - 1°":
+                horario = 1;
+                break;
+            case "MANHÃ - 2°":
+                horario = 2;
+                break;
+            case "MANHÃ - 3°":
+                horario = 3;
+                break;
+            case "MANHÃ - 4°":
+                horario = 4;
+                break;
+            case "MANHÃ - 5°":
+                horario = 5;
+                break;
+            case "TARDE - 1°":
+                horario = 6;
+                break;
+            case "TARDE - 2°":
+                horario = 7;
+                break;
+            case "TARDE - 3°":
+                horario = 8;
+                break;
+            case "TARDE - 4°":
+                horario = 9;
+                break;
+            case "TARDE - 5°":
+                horario = 10;
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Horário inválido");
+                return;
         }
-                
-        Aula aula = new Aula(aluno,data,horario);       
-        
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
-        
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.salvarAula(aula);
-            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-               
-                recebe_nome.setText("");
-                recebe_id.setText("");
-                recebe_data.setText("");
-                recebe_nome.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
+
+        Aula aula = new Aula(aluno, data, horario);
+
+        AulaDAO dao = new AulaDAO();
+        int resposta = dao.salvarAula(aula);
+
+        if (resposta == 1) {
+            JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso");
+
+            recebe_nome.setText("");
+            recebe_id.setText("");
+            recebe_data.setText("");
+            recebe_nome.requestFocus();
+
+        } else if (resposta == 1062) {
+            JOptionPane.showMessageDialog(null, "Erro: aula duplicada no banco");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
         }
-        
-        
-        
+
+
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pesquisarActionPerformed
-            String nome;
-            nome = recebe_nome.getText();
-            
-            Conexao_bd dao = new Conexao_bd();
-            boolean status = dao.conectar();
-            
-            if(status == true){
-                Aluno aluno = dao.consultarAluno(nome);
-                System.out.println(dao.consultarAluno(nome));
-                if(aluno == null){
-                    JOptionPane.showMessageDialog(null,"Aluno não localizado!");
-                }else{
-                    recebe_nome.setText(aluno.getNome());  
-                    recebe_id.setText(Integer.toString(aluno.getId()));
-                }
-                dao.desconectar();
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro de conexão");
-            }
+        String nome = recebe_nome.getText().trim();
+
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite um nome para pesquisar.");
+            return;
+        }
+
+        AlunoDAO dao = new AlunoDAO();
+        Aluno aluno = dao.consultarAluno(nome);
+
+        if (aluno == null) {
+            JOptionPane.showMessageDialog(null, "Aluno não localizado!");
+        } else {
+            recebe_nome.setText(aluno.getNome());
+            recebe_id.setText(Integer.toString(aluno.getId()));
+        }
     }//GEN-LAST:event_bt_pesquisarActionPerformed
 
     private void recebe_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recebe_idActionPerformed
@@ -322,8 +305,8 @@ public class nova_aula extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {              
-                
+            public void run() {
+
                 new nova_aula().setVisible(true);
             }
         });

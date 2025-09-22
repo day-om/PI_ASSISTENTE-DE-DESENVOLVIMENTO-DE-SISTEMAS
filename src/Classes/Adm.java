@@ -38,5 +38,4 @@ public class Adm {
     public void setFuncao(int funcao) {
         this.funcao = funcao;
     }
-
 }

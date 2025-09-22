@@ -1,58 +1,56 @@
-
 package Telas;
 
 import Classes.Usuario;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
-
 public class Menu_inicial extends javax.swing.JFrame {
+
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
 
-    public Menu_inicial(Usuario usuarioLogado){
+    public Menu_inicial(Usuario usuarioLogado) {
         initComponents();
         AtalhoAcessibilidade();
-        
+
         int tipo;
         tipo = usuarioLogado.getTipoUsuario();
-        switch(tipo){
+        switch (tipo) {
             case 1:
-            bt_cadastro.setEnabled(true);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(true); 
-            break;
+                bt_cadastro.setEnabled(true);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(true);
+                break;
             case 2:
-            bt_cadastro.setEnabled(true);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(false); 
-            break;
+                bt_cadastro.setEnabled(true);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(false);
+                break;
             case 3:
-            bt_cadastro.setEnabled(false);
-            bt_aulas.setEnabled(true);
-            bt_financeiro.setEnabled(false);
-            break;
+                bt_cadastro.setEnabled(false);
+                bt_aulas.setEnabled(true);
+                bt_financeiro.setEnabled(false);
+                break;
             default:
-            JOptionPane.showMessageDialog(null,"Tipo de usuário não encontrado!");
-            break;
+                JOptionPane.showMessageDialog(null, "Tipo de usuário não encontrado!");
+                break;
         }
-        
-        
-        
+
     }
+
     public Menu_inicial() {
         initComponents();
         AtalhoAcessibilidade();
-        
+
     }
-    public void AtalhoAcessibilidade(){
+
+    public void AtalhoAcessibilidade() {
         bt_menu.setMnemonic(KeyEvent.VK_M);
         bt_sair.setMnemonic(KeyEvent.VK_S);
         bt_cadastro.setMnemonic(KeyEvent.VK_D);
         bt_aulas.setMnemonic(KeyEvent.VK_A);
-       
+
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -169,7 +167,7 @@ public class Menu_inicial extends javax.swing.JFrame {
     private void bt_aulasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_aulasActionPerformed
         menu_aula menu = new menu_aula(usuarioLogado);
         menu.setVisible(true);
-         dispose();
+        dispose();
     }//GEN-LAST:event_bt_aulasActionPerformed
 
     private void bt_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_menuActionPerformed
@@ -185,7 +183,7 @@ public class Menu_inicial extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_sairActionPerformed
 
     private void bt_financeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_financeiroActionPerformed
-        menu_financeiro menu=new menu_financeiro();
+        menu_financeiro menu = new menu_financeiro();
         menu.setVisible(true);
         dispose();
     }//GEN-LAST:event_bt_financeiroActionPerformed

@@ -1,21 +1,19 @@
-
 package Classes;
 
-
 public class Diario {
+
     int id;
     int aluno;
     String data;
     String presenca;
     String descricao_aula;
     String desempenho;
-    
-    
-    public Diario(){
-        
+
+    public Diario() {
+
     }
 
-    public Diario (int id,int aluno, String data, String presenca, String descricao_aula, String desempenho) {
+    public Diario(int id, int aluno, String data, String presenca, String descricao_aula, String desempenho) {
         this.id = id;
         this.aluno = aluno;
         this.data = data;
@@ -39,7 +37,6 @@ public class Diario {
     public void setId(int id) {
         this.id = id;
     }
-    
 
     public int getAluno() {
         return aluno;
@@ -81,12 +78,4 @@ public class Diario {
         this.desempenho = desempenho;
     }
 
-    public void setVisible(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
-    
-    
-    
-    
 }

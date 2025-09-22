@@ -1,11 +1,7 @@
-
 package Classes;
 
-import java.time.LocalDate;
-import java.util.Date;
-
-
 public class Entrada {
+
     int id;
     int aluno;
     String data;
@@ -13,15 +9,16 @@ public class Entrada {
     int formaPagamento;
     int usuario;
 
-    public Entrada( String data,Double valor,int aluno, int formaPagamento,int usuario) {
+    public Entrada(String data, Double valor, int aluno, int formaPagamento, int usuario) {
         this.aluno = aluno;
         this.data = data;
         this.valor = valor;
         this.formaPagamento = formaPagamento;
         this.usuario = usuario;
     }
-    public Entrada(){
-        
+
+    public Entrada() {
+
     }
 
     public int getId() {
@@ -71,10 +68,5 @@ public class Entrada {
     public void setUsuario(int usuario) {
         this.usuario = usuario;
     }
-    
-    
-    
-    
-    
-    
+
 }

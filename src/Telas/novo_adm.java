@@ -1,31 +1,23 @@
-
 package Telas;
 
 import Classes.Adm;
-import Classes.Conexao_bd;
-import Classes.Professor;
 import Classes.Usuario;
+import DAO.AdmDAO;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author dayan
- */
 public class novo_adm extends javax.swing.JFrame {
 
-   Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+    Usuario usuarioLogado = Usuario.getUsuarioLogado();
+
     public novo_adm() {
         initComponents();
-       
+
     }
 
     novo_adm(Usuario usuarioLogado) {
         initComponents();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -162,58 +154,46 @@ public class novo_adm extends javax.swing.JFrame {
     private void bt_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enviarActionPerformed
         String nome = recebe_nome.getText();
         String funcao = (String) recebe_funcao.getSelectedItem();
-        int funcao_adm = 0;       
-      
-        if (nome.isEmpty()){
-        JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
-        return;
-        }   
-        if(!nome.matches("[a-zA-Z]+")){
-        JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!"); 
-        return; 
+        int funcao_adm = 0;
+
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos.");
+            return;
+        }
+        if (!nome.matches("[a-zA-Z]+")) {
+            JOptionPane.showMessageDialog(null, "No campo (NOME) insira apenas letras!");
+            return;
         }
         switch (funcao) {
-        case "Gestor":
-           funcao_adm = 1;
-        break;
-        case "Aux.Administrativo":
-            funcao_adm = 2;
-        break;
-        
-        default:
-            JOptionPane.showMessageDialog(null, "Função inválida"); 
-        return;
-        }
-        
-        Adm adm = new Adm(nome,funcao_adm);        
-        
-        Conexao_bd dao;
-        boolean status;
-        int resposta;
-        
-        dao = new Conexao_bd();
-        status = dao.conectar();
-        if(status == false){
-            JOptionPane.showMessageDialog(null,"Erro de conexão");
-        }else{
-            resposta = dao.salvarAdm(adm);
-            
-            if(resposta == 1){
-                JOptionPane.showMessageDialog(null,"Dados cadastrados com sucesso");
-               
-                recebe_nome.setText("");
-                recebe_nome.requestFocus();
-                
-            }else if (resposta ==1062){
-                JOptionPane.showMessageDialog(null,"Erro no cadastrado");   
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
-            }
-            dao.desconectar();
+            case "Gestor":
+                funcao_adm = 1;
+                break;
+            case "Aux.Administrativo":
+                funcao_adm = 2;
+                break;
+
+            default:
+                JOptionPane.showMessageDialog(null, "Função inválida");
+                return;
         }
 
-   
-        
+        Adm adm = new Adm(nome, funcao_adm);
+
+        AdmDAO dao = new AdmDAO();
+        int resposta = dao.salvarAdm(adm);
+
+        if (resposta == 1) {
+            JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso");
+
+            recebe_nome.setText("");
+            recebe_nome.requestFocus();
+
+        } else if (resposta == 1062) {
+            JOptionPane.showMessageDialog(null, "Erro no cadastrado");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
+        }
+
     }//GEN-LAST:event_bt_enviarActionPerformed
 
     private void bt_limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limparActionPerformed
@@ -250,8 +230,7 @@ public class novo_adm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
-            
+
                 new novo_adm().setVisible(true);
             }
         });

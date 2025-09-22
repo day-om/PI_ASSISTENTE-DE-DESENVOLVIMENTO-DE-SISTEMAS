@@ -1,9 +1,6 @@
-
 package Telas;
 
-
 import Classes.Usuario;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -11,14 +8,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Cadastro_aluno extends javax.swing.JFrame {
 
-    
-    
-    private DefaultTableModel tabela;
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-    
+
     public Cadastro_aluno() {
         initComponents();
-       
+
     }
 
     Cadastro_aluno(Usuario usuarioLogado) {

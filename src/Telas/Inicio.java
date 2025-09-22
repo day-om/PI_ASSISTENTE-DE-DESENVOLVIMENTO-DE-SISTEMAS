@@ -1,8 +1,6 @@
-
 package Telas;
 
 import java.awt.event.KeyEvent;
-
 
 public class Inicio extends javax.swing.JFrame {
 
@@ -13,8 +11,8 @@ public class Inicio extends javax.swing.JFrame {
         initComponents();
         AtalhoAcessibilidade();
     }
-    
-     public void AtalhoAcessibilidade(){
+
+    public void AtalhoAcessibilidade() {
         bt_entrar.setMnemonic(KeyEvent.VK_ENTER);
     }
 

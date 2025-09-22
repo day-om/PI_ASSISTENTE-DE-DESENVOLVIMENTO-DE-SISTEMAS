@@ -1,9 +1,9 @@
-
 package Telas;
 
-import Classes.Conexao_bd;
 import Classes.Entrada;
 import Classes.Usuario;
+import DAO.AlunoDAO;
+import DAO.EntradaDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -17,21 +17,20 @@ public class lista_entrada extends javax.swing.JFrame {
 
     public DefaultTableModel tabela;
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
-  
-    
+
     public lista_entrada() {
         initComponents();
         preencherTabela();
-        
-        
+
     }
 
     lista_entrada(Usuario usuarioLogado) {
-    initComponents();
-    preencherTabela(); 
+        initComponents();
+        preencherTabela();
     }
+
     private void preencherTabela() {
-        Conexao_bd dao = new Conexao_bd();
+        EntradaDAO dao = new EntradaDAO();
 
         String nome = recebe_nome.getText();
         List<Entrada> listaEntrada = dao.getEntrada(nome);
@@ -41,7 +40,7 @@ public class lista_entrada extends javax.swing.JFrame {
 
         mostra_entradas.setRowSorter(new TableRowSorter(tabelaEntrada));
         if (listaEntrada != null) {
-            for (Entrada c : listaEntrada)    {
+            for (Entrada c : listaEntrada) {
                 Object[] obj = new Object[]{
                     c.getId(),
                     c.getData(),
@@ -55,48 +54,45 @@ public class lista_entrada extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Lista de entradas vazia!");
         }
-     }
-   private boolean excluirDoBanco(int id) {
-    Conexao_bd dao = new Conexao_bd();
-    boolean excluido = dao.excluirAluno(id); 
-
-    if (excluido) {
-        return true;
-    } else {
-        return false;
     }
-    
-}
-    private void excluirLinhaSelecionada() {
-    int linhaSelecionada = mostra_entradas.getSelectedRow();
-    if (linhaSelecionada != -1) {
-        
-        int idSelecionado = (int) mostra_entradas.getValueAt(linhaSelecionada, 0);
-        
-        int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?", 
-                                                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
-        if (resposta == JOptionPane.YES_OPTION) {
-            
-            boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
 
-            if (excluidoComSucesso) {
-                DefaultTableModel modeloTabela = (DefaultTableModel) mostra_entradas.getModel();
-                modeloTabela.removeRow(linhaSelecionada);
-                JOptionPane.showMessageDialog(null, "Entrada excluída com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Não é possível excluir esse entrada, pois existem registros associados a ela.");
-            }
+    private boolean excluirDoBanco(int id) {
+        AlunoDAO dao = new AlunoDAO();
+        boolean excluido = dao.excluirAluno(id);
+
+        if (excluido) {
+            return true;
+        } else {
+            return false;
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+
     }
-}
 
-    
-    
-    
+    private void excluirLinhaSelecionada() {
+        int linhaSelecionada = mostra_entradas.getSelectedRow();
+        if (linhaSelecionada != -1) {
 
-   
+            int idSelecionado = (int) mostra_entradas.getValueAt(linhaSelecionada, 0);
+
+            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?",
+                    "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION) {
+
+                boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
+
+                if (excluidoComSucesso) {
+                    DefaultTableModel modeloTabela = (DefaultTableModel) mostra_entradas.getModel();
+                    modeloTabela.removeRow(linhaSelecionada);
+                    JOptionPane.showMessageDialog(null, "Entrada excluída com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não é possível excluir esse entrada, pois existem registros associados a ela.");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -1,18 +1,20 @@
-
 package Classes;
 
 public class Aluno {
-    int id; 
+
+    int id;
     String nome;
     String idade;
     String cpf;
     int pacote;
     int instrumento;
     int nivel;
-    
-    public Aluno(){
-        
-    };
+
+    public Aluno() {
+
+    }
+
+    ;
 
     public Aluno(String nome, String idade, String cpf, int pacote, int nivel, int instrumento) {
         this.id = id;
@@ -22,7 +24,7 @@ public class Aluno {
         this.pacote = pacote;
         this.nivel = nivel;
         this.instrumento = instrumento;
-        
+
     }
 
     public int getId() {
@@ -32,7 +34,6 @@ public class Aluno {
     public void setId(int id) {
         this.id = id;
     }
-    
 
     public String getNome() {
         return nome;
@@ -81,6 +82,5 @@ public class Aluno {
     public void setNivel(int nivel) {
         this.nivel = nivel;
     }
-    
-    
+
 }

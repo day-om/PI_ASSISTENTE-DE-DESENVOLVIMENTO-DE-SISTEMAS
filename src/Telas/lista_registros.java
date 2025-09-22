@@ -1,31 +1,28 @@
-
 package Telas;
 
-
-import Classes.Conexao_bd;
 import Classes.Diario;
 import Classes.Usuario;
+import DAO.DiarioDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-
 public class lista_registros extends javax.swing.JFrame {
 
     Usuario usuarioLogado = Usuario.getUsuarioLogado();
     public DefaultTableModel tabela;
-    
+
     public lista_registros() {
         initComponents();
         preencherTabela();
     }
-    public lista_registros(Usuario usuarioLogado){
+
+    public lista_registros(Usuario usuarioLogado) {
         initComponents();
         preencherTabela();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -155,7 +152,7 @@ public class lista_registros extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_atualizarActionPerformed
 
     private void preencherTabela() {
-        Conexao_bd dao = new Conexao_bd();
+        DiarioDAO dao = new DiarioDAO();
 
         String nome = recebe_nome.getText();
         List<Diario> listaRegistro = dao.getRegistro(nome);
@@ -165,7 +162,7 @@ public class lista_registros extends javax.swing.JFrame {
 
         mostra_consulta.setRowSorter(new TableRowSorter(tabelaRegistro));
         if (listaRegistro != null) {
-            for (Diario c : listaRegistro)    {
+            for (Diario c : listaRegistro) {
                 Object[] obj = new Object[]{
                     c.getId(),
                     c.getAluno(),
@@ -179,43 +176,45 @@ public class lista_registros extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Lista de regsitros vazia!");
         }
-     }
-      private boolean excluirDoBanco(int id) {
-    Conexao_bd dao = new Conexao_bd();
-    boolean excluido = dao.excluirAluno(id); 
-
-    if (excluido) {
-        return true;
-    } else {
-        return false;
     }
-    
-}
-   private void excluirLinhaSelecionada() {
-    int linhaSelecionada = mostra_consulta.getSelectedRow();
-    if (linhaSelecionada != -1) {
-        
-        int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
-        
-        int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?", 
-                                                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
-        if (resposta == JOptionPane.YES_OPTION) {
-            
-            boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
 
-            if (excluidoComSucesso) {
-                DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
-                modeloTabela.removeRow(linhaSelecionada);
-                JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Não é possível excluir esse registro, pois existem registros associados a ele.");
-            }
+    private boolean excluirDoBanco(int id) {
+        DiarioDAO dao = new DiarioDAO();
+        boolean excluido = dao.excluirRegistros(id);
+
+        if (excluido) {
+            return true;
+        } else {
+            return false;
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+
     }
-}
-    
+
+    private void excluirLinhaSelecionada() {
+        int linhaSelecionada = mostra_consulta.getSelectedRow();
+        if (linhaSelecionada != -1) {
+
+            int idSelecionado = (int) mostra_consulta.getValueAt(linhaSelecionada, 0);
+
+            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse item?",
+                    "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION) {
+
+                boolean excluidoComSucesso = excluirDoBanco(idSelecionado);
+
+                if (excluidoComSucesso) {
+                    DefaultTableModel modeloTabela = (DefaultTableModel) mostra_consulta.getModel();
+                    modeloTabela.removeRow(linhaSelecionada);
+                    JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não é possível excluir esse registro, pois existem registros associados a ele.");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecione uma linha para excluir.");
+        }
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
